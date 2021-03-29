@@ -1,15 +1,9 @@
 #include "Asteroid.h"
 #include <random>
-#include <functional>
-#include<chrono>
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
 
 Asteroid::Asteroid()
 {
-	//std::default_random_engine a;
-	//std::uniform_int_distribution<int> distrib{ 1,6 };
 	srand((unsigned)time(NULL));
 
 	for (int i = 0;i < 20;i++) 

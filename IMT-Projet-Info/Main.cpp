@@ -1,7 +1,5 @@
 #include <iostream>
 #include "Asteroid.h"
-#include <ctime>
-#include <cstdlib>
 
 using namespace std;
 
