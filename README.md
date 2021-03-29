@@ -5,3 +5,4 @@ Projet Info Asteroid-Détection de Collisions
 Quentin Delezenne
 Clément Kieffer
 Louis Delacour
+Hugo Vanhille
