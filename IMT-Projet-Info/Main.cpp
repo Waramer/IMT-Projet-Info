@@ -1,9 +1,14 @@
 #include <iostream>
 #include <raylib.h>
 
+#include "Asteroid.h"
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
 void main() {
-	cout << "Hello World !" << endl;
+	Asteroid asteroid1;
+	asteroid1.affiche();
+
 }
