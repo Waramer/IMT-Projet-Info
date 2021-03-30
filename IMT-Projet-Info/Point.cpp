@@ -1,7 +1,8 @@
 #include "Point.h"
 #include <random>
 #include <iostream>
-#include <ctime>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 using namespace std;
 
@@ -29,4 +30,33 @@ void Point::set_y(int y) {
 }
 void Point::affiche() {
 	cout << "[" << this->get_x() << "," << this->get_y() << "]";
+}
+
+float Point::angle(Point p2)
+{
+	if (get_x() == p2.get_x()) { // si les deux points ont la même abscisse
+		if (get_y() < p2.get_y()) {
+			return 360; // p2 au dessus
+		}
+		else if (get_y() > p2.get_y()) {
+			return 180; // p2 en dessous
+		}
+		return 360;
+	}
+	else
+	{
+		if (get_x() < p2.get_x()) {
+			return 90 - 180 / 3.14159265358979323846 * atan((float)(p2.get_y() - get_y()) / (float)(p2.get_x() - get_x()));
+		}
+		else if (get_x() > p2.get_x()) {
+			return 270 - 180 / 3.14159265358979323846 * atan((float)(p2.get_y() - get_y()) / (float)(p2.get_x() - get_x()));
+		}
+		return 0;
+	}
+}
+
+bool Point::estEgal(Point p2)
+{
+	if ((get_x() == p2.get_x()) && (get_y() == p2.get_y())) { return true; }
+	return false;
 }

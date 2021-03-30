@@ -26,21 +26,59 @@ void Asteroid::affiche()
 	}
 }
 
-float Asteroid::direction(int p1, int p2)
-{
-	if (((float)a_points[p1].get_x() - (float)a_points[p2].get_x()) == 0) {
-		return 0;
-	}
-	float direct = ((float)a_points[p1].get_y() - (float)a_points[p2].get_y())/((float)a_points[p1].get_x() - (float)a_points[p2].get_x()); // Calcul du coefficient de la droite entre les deux points
-	return direct;
-}
 
 int Asteroid::envelopFindInitPoint() {
 	int m = 0;
 	for (int n = 1; n < a_nbPoints; n++) {
-		if (a_points[n].get_x() < a_points[m].get_x()) {
-			m = n;
+		if (a_points[n].get_x() <= a_points[m].get_x()) {
+			if (a_points[n].get_x() == a_points[m].get_x()) {
+				if (a_points[n].get_y() > a_points[m].get_y()) {
+					m = n;
+				}
+			}
+			else
+			{
+				m = n;
+			}
 		}
 	}
 	return m;
+}
+
+void Asteroid::envelopFindList() {
+	cout << "debut recherhce enveloppe" << endl;
+	int initPoint = this->envelopFindInitPoint();
+	int actualPoint = initPoint;
+	bool retour = false;
+	a_enveloppe.push_back(actualPoint); // début de l'enveloppe
+	while (true){
+		int angle = 360;
+		int nextPoint = actualPoint;
+		for (int pt = 0; pt < a_nbPoints; pt++) {
+			if (!(a_points[actualPoint].estEgal(a_points[pt]))) { // on considère uniquement les points différents de celui actuel pour poursuivre l'enveloppe
+				if (retour) {
+					if (((a_points[actualPoint].angle(a_points[pt])) <= angle)&&((a_points[actualPoint].angle(a_points[pt])) > 180 )) {
+						angle = a_points[actualPoint].angle(a_points[pt]);
+						nextPoint = pt;
+					}
+				}
+				else{
+					if ((a_points[actualPoint].angle(a_points[pt])) <= angle) {
+						angle = a_points[actualPoint].angle(a_points[pt]);
+						nextPoint = pt;
+					}
+				}
+			}
+		}
+		a_enveloppe.push_back(nextPoint);
+		actualPoint = nextPoint;
+		if (angle > 180) { retour = true; }
+		if (a_points[actualPoint].estEgal(a_points[initPoint])) {
+			break;
+		}
+	}
+}
+
+vector<int> Asteroid::getEnvelopList() {
+	return a_enveloppe;
 }

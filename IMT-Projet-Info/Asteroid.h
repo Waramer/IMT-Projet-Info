@@ -12,8 +12,9 @@ class Asteroid
 public :
 	Asteroid(int nb_points);
 	void affiche();
-	float direction(int p1, int p2);
 	int envelopFindInitPoint();
+	void envelopFindList();
+	std::vector<int> getEnvelopList();
 
 private:
 	std::vector<Point> a_points;
