@@ -4,19 +4,24 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include "Point.h"
 
 class Asteroid
 {
 public :
-	Asteroid();
+	Asteroid(int nb_points);
 	void affiche();
-
+	int envelopFindInitPoint();
+	void envelopFindList();
+	std::vector<int> getEnvelopList();
 
 private:
-	int m_position[2];
-	int m_forme[20][2];
-	int m_nb_points;
-
+	std::vector<Point> a_points;
+	std::vector<int> a_enveloppe;
+	int a_nbPoints;
+	int a_Xpos;
+	int a_Ypos;
 };
 
 #endif ASTEROID_H_INCLUDED 

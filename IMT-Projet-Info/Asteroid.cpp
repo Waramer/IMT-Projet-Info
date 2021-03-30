@@ -1,36 +1,84 @@
 #include "Asteroid.h"
-#include <random>
-#include <functional>
-#include<chrono>
+#include "Point.h"
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
+#include <vector>
 
-Asteroid::Asteroid()
+using namespace std;
+
+Asteroid::Asteroid(int nb_points)
 {
-	//std::default_random_engine a;
-	//std::uniform_int_distribution<int> distrib{ 1,6 };
-	srand((unsigned)time(NULL));
-
-	for (int i = 0;i < 20;i++) 
-	{
-		for (int j = 0; j < 2; j++)
-		{
-			
-			m_forme[i][j] = rand()%10-5;
-		}
+	srand((unsigned)time(0));
+	a_nbPoints = nb_points;
+	a_points.reserve(nb_points);
+	for (int pt = 0; pt < a_nbPoints; pt++) {
+		a_points.push_back(Point());
 	}
-
-	m_position[0] = 0;
-	m_position[1] = 0;
+	a_Xpos = 0;
+	a_Ypos = 0;
 }
 
 void Asteroid::affiche()
 {
-	std::cout << "la liste des points est :";
-	for (int i = 0; i < 20; i++)
-	{
-		std::cout << "[" << m_forme[i][0] << "," << m_forme[i][1] << "], ";
+	cout << "Voici les points de l'Asteroid : " << endl;
+	for (int pt = 0; pt < a_nbPoints; pt++) {
+		a_points[pt].affiche();
+		cout << endl;
 	}
+}
 
+
+int Asteroid::envelopFindInitPoint() {
+	int m = 0;
+	for (int n = 1; n < a_nbPoints; n++) {
+		if (a_points[n].get_x() <= a_points[m].get_x()) {
+			if (a_points[n].get_x() == a_points[m].get_x()) {
+				if (a_points[n].get_y() > a_points[m].get_y()) {
+					m = n;
+				}
+			}
+			else
+			{
+				m = n;
+			}
+		}
+	}
+	return m;
+}
+
+void Asteroid::envelopFindList() {
+	cout << "debut recherhce enveloppe" << endl;
+	int initPoint = this->envelopFindInitPoint();
+	int actualPoint = initPoint;
+	bool retour = false;
+	a_enveloppe.push_back(actualPoint); // début de l'enveloppe
+	while (true){
+		int angle = 360;
+		int nextPoint = actualPoint;
+		for (int pt = 0; pt < a_nbPoints; pt++) {
+			if (!(a_points[actualPoint].estEgal(a_points[pt]))) { // on considère uniquement les points différents de celui actuel pour poursuivre l'enveloppe
+				if (retour) {
+					if (((a_points[actualPoint].angle(a_points[pt])) <= angle)&&((a_points[actualPoint].angle(a_points[pt])) > 180 )) {
+						angle = a_points[actualPoint].angle(a_points[pt]);
+						nextPoint = pt;
+					}
+				}
+				else{
+					if ((a_points[actualPoint].angle(a_points[pt])) <= angle) {
+						angle = a_points[actualPoint].angle(a_points[pt]);
+						nextPoint = pt;
+					}
+				}
+			}
+		}
+		a_enveloppe.push_back(nextPoint);
+		actualPoint = nextPoint;
+		if (angle > 180) { retour = true; }
+		if (a_points[actualPoint].estEgal(a_points[initPoint])) {
+			break;
+		}
+	}
+}
+
+vector<int> Asteroid::getEnvelopList() {
+	return a_enveloppe;
 }

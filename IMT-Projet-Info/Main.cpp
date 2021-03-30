@@ -1,8 +1,8 @@
 #include <iostream>
 #include <raylib.h>
 #include "Asteroid.h"
-#include <ctime>
-#include <cstdlib>
+#include "Point.h"
+#include <random>
 
 using namespace std;
 
