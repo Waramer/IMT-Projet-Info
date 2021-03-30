@@ -7,7 +7,7 @@
 using namespace std;
 
 void main() {
-	Asteroid asteroid1;
+	Asteroid asteroid1(20);
 	asteroid1.affiche();
 	int height = GetScreenHeight() * 0.05;
 	int width = GetScreenWidth() * 0.05;
