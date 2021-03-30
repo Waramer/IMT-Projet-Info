@@ -9,6 +9,14 @@ using namespace std;
 void main() {
 	Asteroid asteroid1(20);
 	asteroid1.affiche();
+	asteroid1.envelopFindList();
+	vector<int> liste = asteroid1.getEnvelopList();
+	cout << "L'enveloppe trouvee est : [" << liste[0];
+	for (int k = 1; k < liste.size(); k++) {
+		cout << "," << liste[k];
+	}
+	cout << "]" << endl;
+
 	int height = GetScreenHeight() * 0.05;
 	int width = GetScreenWidth() * 0.05;
 	cout <<  "\n"<<" La taille est : " << height << width;
