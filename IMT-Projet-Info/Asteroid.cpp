@@ -13,8 +13,36 @@ Asteroid::Asteroid(int nb_points)
 	for (int pt = 0; pt < a_nbPoints; pt++) {
 		a_points.push_back(Point());
 	}
-	a_Xpos = 0;
-	a_Ypos = 0;
+	//initialise la position de l'astéroide sur le bord de l'écran
+	int const TAILLE_FENETRE = 1000;         //à modifier avec la valeur max de la fenètre
+	int a = rand() % TAILLE_FENETRE;
+	int b = rand() % 2;
+	if (b == 0)
+	{
+		a_position[0] = a;
+		if (rand() % 2 == 0)
+			a_position[1] = TAILLE_FENETRE - 1;
+		else
+			a_position[1] = 0;
+	}
+	else
+	{
+		a_position[1] = a;
+		if (rand() % 2 == 0)
+			a_position[0] = TAILLE_FENETRE - 1;
+		else
+			a_position[0] = 0;
+	}
+}
+
+int* Asteroid::getPosition()
+{
+	return a_position;
+}
+
+int* Asteroid::newPosition()
+{
+	return nullptr;
 }
 
 void Asteroid::affiche()
@@ -46,7 +74,6 @@ int Asteroid::envelopFindInitPoint() {
 }
 
 void Asteroid::envelopFindList() {
-	cout << "debut recherhce enveloppe" << endl;
 	int initPoint = this->envelopFindInitPoint();
 	int actualPoint = initPoint;
 	bool retour = false;

@@ -7,10 +7,12 @@ using namespace std;
 
 void main() {
 	Asteroid aste(20);
-	cout << "point de depart de l'enveloppe : " << aste.envelopFindInitPoint() << endl;
+	aste.affiche();
 	aste.envelopFindList();
+
 	vector<int> liste = aste.getEnvelopList();
-	cout << "[" << liste[0];
+
+	cout << "L'enveloppe trouvee est : [" << liste[0];
 	for (int k = 1; k < liste.size(); k++) {
 		cout << "," << liste[k];
 	}
