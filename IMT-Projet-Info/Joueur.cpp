@@ -2,7 +2,6 @@
 
 
 Joueur::Joueur() {
-
 	m_score = 0;
 	m_best_score = 0;
 }

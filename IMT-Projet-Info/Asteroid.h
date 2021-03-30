@@ -5,19 +5,21 @@
 #include <iostream>
 #include <string>
 
+
 class Asteroid
 {
 public:
 	Asteroid();
 	void affiche();
 	int* getPosition();
+	int* newPosition();
 
 private:
 	int m_forme[20][2];
 	int m_position[2];
 	int m_nb_points;
 	int m_vitesse;
-	int direction2[5][5];
+	int direction[5][5];
 
 };
 
