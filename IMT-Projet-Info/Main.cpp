@@ -6,7 +6,7 @@
 using namespace std;
 
 void main() {
-	Asteroid aste(20);
+	Asteroid aste(10);
 	aste.affiche();
 	aste.envelopFindList();
 
@@ -17,4 +17,13 @@ void main() {
 		cout << "," << liste[k];
 	}
 	cout << "]" << endl;
+
+	Point test(-4,4);
+	test.affiche();
+	if (aste.pointDansEnveloppe(test)) {
+		cout << "true" << endl;
+	}
+	else {
+		cout << "false" << endl;
+	}
 }

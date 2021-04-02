@@ -55,8 +55,12 @@ float Point::angle(Point p2)
 	}
 }
 
+// Points supperposés
+
 bool Point::estEgal(Point p2)
 {
 	if ((get_x() == p2.get_x()) && (get_y() == p2.get_y())) { return true; }
 	return false;
 }
+
+
