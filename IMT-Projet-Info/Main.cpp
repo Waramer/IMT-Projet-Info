@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void main() {
+int main() {
 	Asteroid asteroid1(20);
 	asteroid1.affiche();
 	asteroid1.envelopFindList();
