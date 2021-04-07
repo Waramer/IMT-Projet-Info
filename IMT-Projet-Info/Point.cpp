@@ -7,8 +7,8 @@ using namespace std;
 
 Point::Point()
 {
-	p_x = rand() % 11 - 5;
-	p_y = rand() % 11 - 5;
+	p_x = rand() % 61 - 30;
+	p_y = rand() % 61 - 30;
 }
 Point::Point(int x, int y) {
 	p_x = x;
@@ -54,8 +54,12 @@ float Point::angle(Point p2)
 	}
 }
 
+// Points supperposés
+
 bool Point::estEgal(Point p2)
 {
 	if ((get_x() == p2.get_x()) && (get_y() == p2.get_y())) { return true; }
 	return false;
 }
+
+
