@@ -19,6 +19,9 @@ Ecran::Ecran()
         const int screenWidth = 800;
         const int screenHeight = 450;
         int selection = 0;
+        int difficultyLevel = 0;
+        int fullScreen = 0;
+        int musicON = 0;
 
         //initialisation de la fenêtre
         SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -65,15 +68,25 @@ Ecran::Ecran()
         const char* s2 = "HIGHSCORES";
         int tailleS2 = MeasureText(s2, 120);
 
+        const char* s3 = "PRESS ENTER TO RETURN TO MENU";
+        int tailleS3 = MeasureText(s3, 40);
+
+
+        // Tableau des scores trié
+
+        int scoresTab[15] = {5500, 4256, 4214, 4053, 3501, 2798, 2435, 1789, 1456, 1234,880,756,526,128,42};
+        char* scoresTabChar[15];
+
+
 
         // choix options
         const char* displayTab[2] = { "OFF","ON" };
         const char* difficultyTab[3] = { "EASY","NORMAL", "HARD" };
         const char* musicTab[2] = { "ON","OFF" };
         int selectionSettings = 0;
-        int selectionDisplay = 0;
-        int selectionDifficulty = 0;
-        int selectionMusic=0;
+        int selectionDisplay = fullScreen;
+        int selectionDifficulty = difficultyLevel;
+        int selectionMusic= musicON;
 
         
 
@@ -118,7 +131,7 @@ Ecran::Ecran()
                     }
                     else if (selection == 1) {
                         // Ouvrir la page Highscores
-                        res = 3
+                        res = 3;
                     }
                     else if (selection == 2) {
                         // Ouvrir la page Settings
@@ -224,6 +237,22 @@ Ecran::Ecran()
             ClearBackground(color);
 
             DrawText(("%c", s2), x / 2 - tailleS2 / 2, 100, 120, WHITE);
+            for (int i = 0; i < 5;i++) {
+                DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 4, 300+100*i, 40, GRAY);
+            }
+            for (int i = 5; i < 10;i++) {
+                DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 2, 300 + 100 * (i-5), 40, GRAY);
+            }
+            for (int i = 10; i < 15;i++) {
+                DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), 3*x / 4, 300 + 100 * (i - 10), 40, GRAY);
+            }
+
+            DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 150, 40, RED);
+            if (IsKeyPressed(KEY_ENTER)) {
+                res = 0;
+            }
+            
+            EndDrawing();
             }
             else if (res == 4) {
 
@@ -261,17 +290,18 @@ Ecran::Ecran()
                     selectionDisplay--;
                 }
                 if (selectionDisplay == 0) {
-                    if (IsKeyPressed(KEY_ENTER)) {
+                    if (IsKeyPressed(KEY_ENTER) && fullScreen == 1) {
                         ToggleFullscreen();
+                        fullScreen = selectionDisplay;
                     }
-                    
                 }
-                if (selectionDisplay == 1) {
-                    if (IsKeyPressed(KEY_ENTER)) {
+                else {
+                    if (IsKeyPressed(KEY_ENTER) && fullScreen == 0) {
                         ToggleFullscreen();
+                        fullScreen = selectionDisplay;
                     }
-                    
                 }
+                
                 break;
             case 1:
                 // Difficulty
@@ -281,6 +311,9 @@ Ecran::Ecran()
 
                 if (IsKeyPressed(KEY_LEFT) && selectionDifficulty > 0) {
                     selectionDifficulty--;
+                }
+                if (IsKeyPressed(KEY_ENTER)) {
+                    difficultyLevel = selectionDifficulty;
                 }
                 break;
             case 2:
@@ -292,9 +325,15 @@ Ecran::Ecran()
                 if (IsKeyPressed(KEY_LEFT) && selectionMusic > 0) {
                     selectionMusic--;
                 }
+                if (IsKeyPressed(KEY_ENTER)) {
+                    musicON = selectionMusic;
+                }
                 break;
             case 3:
                 if (IsKeyPressed(KEY_ENTER)) {
+                    selectionDisplay = fullScreen;
+                    selectionDifficulty = difficultyLevel;
+                    selectionMusic = musicON;
                     res = 0;
                 }
                 break;
