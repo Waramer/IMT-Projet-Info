@@ -3,7 +3,7 @@
 OptionMenu::OptionMenu(const char* s, bool selection) {
     this->s = s;
     this->estSelectionne = selection;
-    this->taille = MeasureText(s, 20);
+    this->taille = MeasureText(s, 40);
     if (selection) {
         setColor(RED);
     }

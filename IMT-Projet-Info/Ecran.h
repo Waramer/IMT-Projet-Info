@@ -9,6 +9,7 @@
 class Ecran {
 public:
 	Ecran();
+	void affiche();
 };
 
 #endif ECRAN_H_INCLUDED 
