@@ -17,9 +17,6 @@ using namespace std;
 
 int main() {
 
-    //const char* monitor = GetMonitorName();
-    Ecran test;
-    test.affiche();
 
 
     return 0;

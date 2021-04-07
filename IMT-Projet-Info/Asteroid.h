@@ -19,6 +19,7 @@ public:
 	bool pointDansEnveloppe(Point point);
 	void renduAsteroid();
 	void setPosition(int x, int y);
+	void move();
 
 
 private:
@@ -27,6 +28,6 @@ private:
 	int a_nbPoints;
 	int a_position[2];
 	int a_vitesse;
-	int a_direction[5][5];
+	int a_direction[2];
 };
 #endif ASTEROID_H_INCLUDED 

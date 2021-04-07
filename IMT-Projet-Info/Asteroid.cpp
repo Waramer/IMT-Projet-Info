@@ -15,25 +15,39 @@ Asteroid::Asteroid(int nb_points)
 		a_points.push_back(Point());
 	}
 	//initialise la position de l'astéroide sur le bord de l'écran
-	int const TAILLE_FENETRE = 1000;         //à modifier avec la valeur max de la fenètre
-	int a = rand() % TAILLE_FENETRE;
+	int const TAILLE_FENETRE_X = GetScreenWidth();
+	int const TAILLE_FENETRE_Y = GetScreenHeight();
+	int a = rand() % TAILLE_FENETRE_X;
+	int aa= rand() % TAILLE_FENETRE_Y*0.88;
 	int b = rand() % 2;
 	if (b == 0)
 	{
 		a_position[0] = a;
 		if (rand() % 2 == 0)
-			a_position[1] = TAILLE_FENETRE - 1;
+			a_position[1] = TAILLE_FENETRE_Y - 1;
 		else
-			a_position[1] = 0;
+			a_position[1] = 0.12* TAILLE_FENETRE_Y;
 	}
 	else
 	{
-		a_position[1] = a;
+		a_position[1] = aa;
 		if (rand() % 2 == 0)
-			a_position[0] = TAILLE_FENETRE - 1;
+			a_position[0] = TAILLE_FENETRE_X - 1;
 		else
 			a_position[0] = 0;
 	}
+	//initialisation de la direction 
+	if(a_position[0]==0)
+		a_direction[0]= rand() %3;
+	else 
+		a_direction[0] = rand() % 3-3;
+	if(a_position[1]==0)
+		a_direction[1] = rand() %3;
+	else
+		a_direction[1] = rand() %3 - 3;
+
+	//initialisation de l'enveloppe
+	envelopFindList();
 }
 
 void Asteroid::setPosition(int x, int y)
@@ -173,6 +187,11 @@ void Asteroid::renduAsteroid()
 	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
 		DrawLine(a_position[0]+a_points[a_enveloppe[pt]].get_x(), a_position[1] + a_points[a_enveloppe[pt]].get_y(), a_position[0] + a_points[a_enveloppe[pt+1]].get_x(), a_position[1] + a_points[a_enveloppe[pt+1]].get_y(), WHITE);
 	}
+}
+
+void Asteroid::move() {
+	a_position[0] += a_direction[0];
+	a_position[1] += a_direction[1];
 }
 
 
