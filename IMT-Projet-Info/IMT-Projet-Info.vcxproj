@@ -121,7 +121,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GRAPHICS_API_OPENGL_33;PLATFORM_DESKTOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\IMT\L3\Programmation\Projet info\raylib-3.5.0\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -153,6 +153,10 @@
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Ecran.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="OptionMenu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OptionMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />

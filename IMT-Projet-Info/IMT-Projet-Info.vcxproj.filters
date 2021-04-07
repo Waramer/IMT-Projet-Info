@@ -32,5 +32,13 @@
     <ClInclude Include="Ecran.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClCompile Include="OptionMenu.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OptionMenu.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
