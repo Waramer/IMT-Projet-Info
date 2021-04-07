@@ -17,8 +17,8 @@ public:
 	std::vector<int> getEnvelopList();
 	std::vector<Point> getPoints();
 	bool pointDansEnveloppe(Point point);
-	int* getPosition();
-	int* newPosition();
+	void renduAsteroid();
+	void setPosition(int x, int y);
 
 
 private:

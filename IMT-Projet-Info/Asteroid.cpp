@@ -2,6 +2,7 @@
 #include "Point.h"
 #include <iostream>
 #include <vector>
+#include <raylib.h>
 
 using namespace std;
 
@@ -35,14 +36,10 @@ Asteroid::Asteroid(int nb_points)
 	}
 }
 
-int* Asteroid::getPosition()
+void Asteroid::setPosition(int x, int y)
 {
-	return a_position;
-}
-
-int* Asteroid::newPosition()
-{
-	return nullptr;
+	a_position[0] = x;
+	a_position[1] = y;
 }
 
 void Asteroid::affiche()
@@ -169,40 +166,13 @@ bool Asteroid::pointDansEnveloppe(Point point)
 	return true;
 }
 
+// Code du rendu graphique
 
-// Code de collision
-/*
-bool Point::estDansEnveloppe(vector<int> enveloppe,vector<Point> points) {
-	// V1
-	// On va tester si le point satisfait toutes les conditions pour se trouver dans l'enveloppe, i.e. se trouve à l'interieur de tous les segments.
-	// Si le point se trouve "à gauche" du segment, quand on le parcours, alors il ne se trouve pas dans l'enveloppe (car elle est créée en sesn horaire).
-	for (int pt = 0 ; pt < enveloppe.size() - 1 ; pt++) {
-		// nous regardons ici le segment entre deux point consécutifs
-		Point p1 = points[pt]; // première extrémité du segment
-		Point p2 = points[pt + 1]; // deuxième extrémité du segment
-
-		float alpha = p1.angle(p2) - (angle(p1) - 180); // angle entre (p1,point à tester) et (p1,p2)  =  angle de p1 vers p2 - angle de p1 vers le point à tester
-
-		if (alpha >= 0) { // équivalent à "le point est à gauche du segment lorsqu'on le regarde en étant sur p1 et en regardant vers p2 en parcourant l'enveloppe en sens horaire"
-			return false;
-		}
-	}
-	return true;
-
-	// V2
-	// On va tester si le point satisfait toutes les conditions pour se trouver dans l'enveloppe, i.e. se trouve à l'interieur de tous les segments.
-	// Si le point se trouve "à gauche" du segment, quand on le parcours, alors il ne se trouve pas dans l'enveloppe (car elle est créée en sesn horaire).
+void Asteroid::renduAsteroid()
+{
 	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
-		// nous regardons ici le segment entre deux point consécutifs
-		int alpha = (a_points[a_enveloppe[pt]].angle(a_points[a_enveloppe[pt + 1]]) - (point.angle(a_points[a_enveloppe[pt]]) - 180));
-		cout << pt << ";" << alpha << endl;
-		if ( alpha >= 0) { // équivalent à "le point est à gauche du segment lorsqu'on le regarde en étant sur p1 et en regardant vers p2 en parcourant l'enveloppe en sens horaire"
-			return false;
-		}
+		DrawLine(a_position[0]+a_points[a_enveloppe[pt]].get_x(), a_position[1] + a_points[a_enveloppe[pt]].get_y(), a_position[0] + a_points[a_enveloppe[pt+1]].get_x(), a_position[1] + a_points[a_enveloppe[pt+1]].get_y(), WHITE);
 	}
-	return true;
-
-
-
 }
-*/
+
+

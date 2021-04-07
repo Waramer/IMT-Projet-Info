@@ -10,7 +10,6 @@ void main() {
 	Asteroid aste(10);
 	aste.affiche();
 	aste.envelopFindList();
-
 	vector<int> liste = aste.getEnvelopList();
 
 	cout << "L'enveloppe trouvee est : [" << liste[0];
@@ -19,6 +18,8 @@ void main() {
 	}
 	cout << "]" << endl;
 
+	aste.setPosition(350, 250);
+
 	int height = GetScreenHeight() * 0.05;
 	int width = GetScreenWidth() * 0.05;
 	cout <<  "\n"<<" La taille est : " << height << width;
@@ -26,8 +27,9 @@ void main() {
 	while (!WindowShouldClose()) { 
 		EnableCursor(); 
 		BeginDrawing();
-		ClearBackground(RED);
+		ClearBackground(BLACK);
 		DrawText("Vous etes un genie", 50, 40, 30, WHITE);
+		aste.renduAsteroid();
 		EndDrawing();
 	}
 	CloseWindow();

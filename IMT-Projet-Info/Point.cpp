@@ -7,8 +7,8 @@ using namespace std;
 
 Point::Point()
 {
-	p_x = rand() % 11 - 5;
-	p_y = rand() % 11 - 5;
+	p_x = rand() % 61 - 30;
+	p_y = rand() % 61 - 30;
 }
 Point::Point(int x, int y) {
 	p_x = x;
