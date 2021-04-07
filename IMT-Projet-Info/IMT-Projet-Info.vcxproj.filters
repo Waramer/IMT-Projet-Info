@@ -27,6 +27,9 @@
     <ClCompile Include="Joueur.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Ecran.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h">
@@ -36,6 +39,17 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Joueur.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Ecran.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClCompile Include="OptionMenu.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OptionMenu.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
