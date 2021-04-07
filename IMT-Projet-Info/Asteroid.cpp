@@ -2,6 +2,7 @@
 #include "Point.h"
 #include <iostream>
 #include <vector>
+#include <raylib.h>
 
 using namespace std;
 
@@ -35,14 +36,10 @@ Asteroid::Asteroid(int nb_points)
 	}
 }
 
-int* Asteroid::getPosition()
+void Asteroid::setPosition(int x, int y)
 {
-	return a_position;
-}
-
-int* Asteroid::newPosition()
-{
-	return nullptr;
+	a_position[0] = x;
+	a_position[1] = y;
 }
 
 void Asteroid::affiche()
@@ -54,6 +51,7 @@ void Asteroid::affiche()
 	}
 }
 
+// Code de l'enveloppe
 
 int Asteroid::envelopFindInitPoint() {
 	int m = 0;
@@ -109,3 +107,72 @@ void Asteroid::envelopFindList() {
 vector<int> Asteroid::getEnvelopList() {
 	return a_enveloppe;
 }
+
+std::vector<Point> Asteroid::getPoints()
+{
+	return a_points;
+}
+
+// Code de collision
+
+bool Asteroid::pointDansEnveloppe(Point point)
+{
+	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
+
+		Point p1 = a_points[a_enveloppe[pt]];
+		Point p2 = a_points[a_enveloppe[pt+1]];
+
+		//on considère d'abord les partie "droite" à 0,90,180,270 qui sont des ectrémités de l'enveloppe par convexité de cette dernière.
+		if (p1.get_x() == p2.get_x()) {
+			if (p1.get_y() <= p2.get_y()) {
+				if (point.get_x() <= p1.get_x()) {
+					return false;
+				}
+			}
+			if (p1.get_y() >= p2.get_y()) {
+				if (point.get_x() >= p1.get_x()) {
+					return false;
+				}
+			}
+		}
+		if (p1.get_y() == p2.get_y()) {
+			if (p1.get_x() <= p2.get_x()) {
+				if (point.get_y() >= p1.get_y()) {
+					return false;
+				}
+			}
+			if (p1.get_x() >= p2.get_x()) {
+				if (point.get_y() <= p1.get_y()) {
+					return false;
+				}
+			}
+		}
+		else {
+			// il faut alors regarder un hyperplan ou hypoplan (suivant le gradient de x) de la droite caractérisé par les points p1 et p2.
+			double a = ((float)(p2.get_y()-p1.get_y())/(p2.get_x()-p1.get_x()));
+			double b = p1.get_y() - a * p1.get_x();
+			if (p1.get_x() < p2.get_x()) {
+				if (point.get_y() > a * point.get_x() + b) {
+					return false;
+				}
+			}
+			if (p1.get_x() > p2.get_x()) {
+				if (point.get_y() < a * point.get_x() + b) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+// Code du rendu graphique
+
+void Asteroid::renduAsteroid()
+{
+	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
+		DrawLine(a_position[0]+a_points[a_enveloppe[pt]].get_x(), a_position[1] + a_points[a_enveloppe[pt]].get_y(), a_position[0] + a_points[a_enveloppe[pt+1]].get_x(), a_position[1] + a_points[a_enveloppe[pt+1]].get_y(), WHITE);
+	}
+}
+
+
