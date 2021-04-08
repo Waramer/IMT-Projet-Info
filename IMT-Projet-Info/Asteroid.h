@@ -10,7 +10,7 @@
 class Asteroid
 {
 public:
-	Asteroid(int nb_points);
+	Asteroid(int nb_points, int rayon);
 	void affiche();
 	int envelopFindInitPoint();
 	void envelopFindList();
@@ -19,15 +19,18 @@ public:
 	bool pointDansEnveloppe(Point point);
 	void renduAsteroid();
 	void setPosition(int x, int y);
+	double getPosX();
+	double getPosY();
 	void move();
-
+	int getRayon();
 
 private:
 	std::vector<Point> a_points;
 	std::vector<int> a_enveloppe;
+	int a_rayon;
 	int a_nbPoints;
-	int a_position[2];
+	double a_position[2];
 	int a_vitesse;
-	int a_direction[2];
+	double a_direction[2];
 };
 #endif ASTEROID_H_INCLUDED 

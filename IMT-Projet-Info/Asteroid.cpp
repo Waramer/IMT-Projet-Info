@@ -6,47 +6,44 @@
 
 using namespace std;
 
-Asteroid::Asteroid(int nb_points)
+Asteroid::Asteroid(int nb_points, int rayon)
 {
-	srand((unsigned)time(0));
+	a_rayon = rayon;
 	a_nbPoints = nb_points;
 	a_points.reserve(nb_points);
-	for (int pt = 0; pt < a_nbPoints; pt++) {
-		a_points.push_back(Point());
-	}
-	//initialise la position de l'astéroide sur le bord de l'écran
-	int const TAILLE_FENETRE_X = GetScreenWidth();
-	int const TAILLE_FENETRE_Y = GetScreenHeight();
-	int a = rand() % TAILLE_FENETRE_X;
-	int aa= rand() % TAILLE_FENETRE_Y*0.88;
-	int b = rand() % 2;
-	if (b == 0)
-	{
-		a_position[0] = a;
-		if (rand() % 2 == 0)
-			a_position[1] = TAILLE_FENETRE_Y - 1;
-		else
-			a_position[1] = 0.12* TAILLE_FENETRE_Y;
-	}
-	else
-	{
-		a_position[1] = aa;
-		if (rand() % 2 == 0)
-			a_position[0] = TAILLE_FENETRE_X - 1;
-		else
-			a_position[0] = 0;
-	}
-	//initialisation de la direction 
-	if(a_position[0]==0)
-		a_direction[0]= rand() %3;
-	else 
-		a_direction[0] = rand() % 3-3;
-	if(a_position[1]==0)
-		a_direction[1] = rand() %3;
-	else
-		a_direction[1] = rand() %3 - 3;
 
-	//initialisation de l'enveloppe
+	for (int pt = 0; pt < a_nbPoints; pt++) {
+		a_points.push_back(Point(rayon));
+	}
+
+	// Initialisation de la position
+	int const fen_x = GetScreenWidth();
+	int const fen_y = GetScreenHeight();
+	int num = rand() % 4;
+	if (num == 0) {
+		a_position[0] = 50;
+		a_position[1] = rand() % (int)(fen_y*0.9) + (int)fen_y*0.1;
+	}
+	else if (num == 1) {
+		a_position[0] = fen_x - 50;
+		a_position[1] = rand() % (int)(fen_y * 0.9) + (int)fen_y * 0.1;
+	}
+	else if (num == 2) {
+		a_position[0] = rand() % fen_x;
+		a_position[1] = 0.1 * fen_y + 50;
+	}
+	else if (num == 3) {
+		a_position[0] = rand() % fen_x;
+		a_position[1] = fen_y - 50;
+	}
+
+	// Initialisation de la direction
+	double deltax = rand() % (int)(fen_x * 0.8) - fen_x * 0.4 + fen_x/2;
+	double deltay = rand() % (int)(fen_y * 0.8) - fen_y * 0.4 + fen_y/2;
+	a_direction[0] = (deltax - a_position[0]) / sqrt(pow((deltax - a_position[0]), 2) + pow((deltay - a_position[1]), 2)) ;
+	a_direction[1] = (deltay - a_position[1]) / sqrt(pow((deltax - a_position[0]), 2) + pow((deltay - a_position[1]), 2)) ;
+
+	// Création de l'enveloppe
 	envelopFindList();
 }
 
@@ -54,6 +51,12 @@ void Asteroid::setPosition(int x, int y)
 {
 	a_position[0] = x;
 	a_position[1] = y;
+}
+double Asteroid::getPosX() {
+	return a_position[0];
+}
+double Asteroid::getPosY() {
+	return a_position[1];
 }
 
 void Asteroid::affiche()
@@ -91,7 +94,7 @@ void Asteroid::envelopFindList() {
 	bool retour = false;
 	a_enveloppe.push_back(actualPoint); // début de l'enveloppe
 	while (true){
-		int angle = 360;
+		double angle = 360;
 		int nextPoint = actualPoint;
 		for (int pt = 0; pt < a_nbPoints; pt++) {
 			if (!(a_points[actualPoint].estEgal(a_points[pt]))) { // on considère uniquement les points différents de celui actuel pour poursuivre l'enveloppe
@@ -192,6 +195,11 @@ void Asteroid::renduAsteroid()
 void Asteroid::move() {
 	a_position[0] += a_direction[0];
 	a_position[1] += a_direction[1];
+}
+
+int Asteroid::getRayon()
+{
+	return a_rayon;
 }
 
 

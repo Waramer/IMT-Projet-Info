@@ -17,7 +17,8 @@ using namespace std;
 
 int main() {
 
-
+    Ecran ecran;
+    ecran.affiche();
 
     return 0;
 }

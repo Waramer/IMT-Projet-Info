@@ -7,6 +7,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "optionMenu.h"
+#include "Jeu.h"
+#include "Joueur.h"
 
 using namespace std;
 
@@ -53,7 +55,7 @@ Ecran::Ecran()
             /*
                 -------------------------------------------------------------------------Ecran d'accueil --------------------------------------------------------------------------------------------------
             */
-            if (res == 0) {
+            while (res == 0) {
                 BeginDrawing();
 
                 ClearBackground(color);
@@ -111,25 +113,25 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran de Jeu --------------------------------------------------------------------------------------------------            
             */
 
+            Jeu jeu;
+            Joueur joueur;
 
-            else if (res == 1) {
+            while (res == 1) {
 
                 //affiachage du haut de l'ecran
+
                 EnableCursor();
+
                 BeginDrawing();
                 ClearBackground(BLACK);
                 int test = MeasureText("Asteroids", 30);
                 DrawText("Asteroids", GetScreenWidth() * 0.5 - (test * 0.5), GetScreenHeight() * 0.05, 50, WHITE);
                 DrawText("Press P for pause", GetScreenWidth() * 0.85 - (test * 0.5), GetScreenHeight() * 0.05, 30, WHITE);
-
                 DrawLine(0, GetScreenHeight() * 0.1, GetScreenWidth(), GetScreenHeight() * 0.1, WHITE);
                 EndDrawing();
 
-
                 float angle = GetGestureDragAngle();
-
                 double pi = 3.1415;
-
                 int sourisx = GetMouseX();
                 int sourisy = GetMouseY();
 
@@ -143,7 +145,6 @@ Ecran::Ecran()
                         angle = 180;
                     }
                     else angle = 180;
-
                 }
                 else {
                     if (sourisx > pointeur.x) {
@@ -151,15 +152,17 @@ Ecran::Ecran()
                     }
                     else if (sourisx < pointeur.x) {
                         angle = 360 - (270 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));
-
                     }
                     else
                         angle = 0;
                 }
 
+                //afficher le pointeur
+                jeu.collisionCurseur(pointeur.x,pointeur.y,angle);
+                DrawPolyLines(pointeur, 3, 20, angle, WHITE);
+                
 
                 //déplacer le pointeur quand on appuye sur le pavé directionnel
-                cout << (int)y * 0.1 << "\n";
                 if (IsKeyDown(265) && ((int)pointeur.y == (int)(y * 0.1) || (int)(pointeur.y - 1) == (int)(y * 0.1))) pointeur.y = y;
                 else if (IsKeyDown(265))pointeur.y -= 2;
 
@@ -177,19 +180,15 @@ Ecran::Ecran()
                 if (IsKeyDown(KEY_P)) {
                     res = 0;
                 }
-
-
-
-
-                //afficher le pointeur
-
-                DrawPolyLines(pointeur, 3, 20, angle, WHITE);
+                
+                // affichage des asteroids
+                //jeu.avancement();
+                jeu.renduAsteroids();
+                
+                
             }
 
         }
 
         CloseWindow();
     }
-
-
-
