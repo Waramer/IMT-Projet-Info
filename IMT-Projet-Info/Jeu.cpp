@@ -6,7 +6,7 @@ Jeu::Jeu()
 	srand((unsigned)time(0));
 	j_etat = true;
 	j_timer = 0;
-	j_nbAsteroids = 500;
+	j_nbAsteroids = 5;
 	j_asteroids.push_back(Asteroid(10, 50));
 	j_curseur.push_back(Point(500, 500));
 	j_curseur.push_back(Point(500, 500));
