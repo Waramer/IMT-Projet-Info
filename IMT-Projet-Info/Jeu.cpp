@@ -1,12 +1,13 @@
 #include "Jeu.h"
 #include "raylib.h"
-
+#include <iostream>
+using namespace std;
 Jeu::Jeu()
 {
 	srand((unsigned)time(0));
 	j_etat = true;
 	j_timer = 0;
-	j_nbAsteroids = 500;
+	j_nbAsteroids = 10;
 	j_asteroids.push_back(Asteroid(10, 50));
 	j_curseur.push_back(Point(500, 500));
 	j_curseur.push_back(Point(500, 500));
@@ -14,11 +15,9 @@ Jeu::Jeu()
 }
 
 void Jeu::nextFrame() {
-	this->avancement();
-	this->renduAsteroids();
 }
 
-void Jeu::avancement()
+void Jeu::avancement(int curs_x, int curs_y, double angle)
 {
 	if (j_asteroids.size() < j_nbAsteroids) {
 		j_asteroids.push_back(Asteroid(10, 50));
@@ -31,6 +30,13 @@ void Jeu::avancement()
 		else {
 			j_asteroids[i].move();
 		}
+	}
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+		j_tirs.push_back(Tir(curs_x,curs_y,angle));
+	}
+	for (int i = 0; i < j_tirs.size(); i++) {
+		j_tirs[i].move();
+		j_tirs[i].rendu();
 	}
 }
 
@@ -63,25 +69,45 @@ bool Jeu::collisionCurseur(int curs_x,int curs_y,double angle) {
 
 bool Jeu::pointDansCurseur(Point point)
 {
-	for (int pt = 0; pt < 3; pt++) {
-		DrawCircle(j_curseur[pt].get_x() + 300, j_curseur[0].get_y() + 300, 3, RED);
-		DrawCircle(j_curseur[(pt + 1) % 3].get_x() + 300, j_curseur[(pt + 1) % 3].get_y() + 300, 3, RED);
-		DrawCircle(j_curseur[(pt + 2) % 3].get_x() + 300, j_curseur[(pt + 2) % 3].get_y() + 300, 3, RED);
-		DrawCircle(point.get_x() + 300, point.get_y() + 300, 3, GREEN);
-		double angle0 = j_curseur[pt].angle(point); // angle avec le point à tester
-		double angle1 = j_curseur[pt].angle(j_curseur[(pt+1)%3]); // avec le point suivant du curseur (sens horaire)
-		double angle2 = j_curseur[pt].angle(j_curseur[(pt+2) % 3]); // avec le dernier point du curseur (sens horaire)
-		if (angle1>=240) { // alors l'intervalle à tester est [angle1;360]U[0;angle2]
-			if ((angle0 < angle1) && (angle0 > angle2)) {
-				return false;
-			}
+	//1e angle de vue
+	int angle0p = j_curseur[0].angle(point);
+	int angle01 = j_curseur[0].angle(j_curseur[1]);
+	int angle02 = j_curseur[0].angle(j_curseur[2]);
+	if (angle02 > 300 ) {
+		if ( angle0p < angle02 && angle0p > angle01 ) {
 		}
-		else { // sinon c'est le cas classique et il faut tester l'intervalle [angle1;angle2]
-			if ((angle0 < angle1)||(angle0 > angle2 )) {
-				return false;
-			}
+	}
+	else {
+		if (angle0p < angle02 || angle0p > angle01) {
 		}
-
+	}
+	// 2e angle de vue
+	int angle1p = j_curseur[1].angle(point);
+	int angle10 = j_curseur[1].angle(j_curseur[0]);
+	int angle12 = j_curseur[1].angle(j_curseur[2]);
+	if (angle10 > 300) {
+		if (angle1p < angle10 && angle1p > angle12) {
+			return false;
+		}
+	}
+	else {
+		if (angle1p < angle10 || angle1p > angle12) {
+			return false;
+		}
+	}
+	// 3e angle de vue
+	int angle2p = j_curseur[2].angle(point);
+	int angle20 = j_curseur[2].angle(j_curseur[0]);
+	int angle21 = j_curseur[2].angle(j_curseur[1]);
+	if (angle21 > 300) {
+		if (angle2p < angle21 && angle2p > angle20) {
+			return false;
+		}
+	}
+	else {
+		if (angle2p < angle21 || angle2p > angle20) {
+			return false;
+		}
 	}
 	return true;
 }

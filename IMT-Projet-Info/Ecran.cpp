@@ -228,11 +228,8 @@ Ecran::Ecran()
 
                 j.collisionCurseur(pointeur.x,pointeur.y, angle);
 
-                j.avancement();
+                j.avancement(pointeur.x,pointeur.y, angle);
                 j.renduAsteroids();
-
-
-
 
                 /*
                 -------------------------------------------------------------------------Ecran de Pause --------------------------------------------------------------------------------------------------
