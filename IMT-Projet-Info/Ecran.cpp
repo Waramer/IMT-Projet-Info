@@ -100,6 +100,22 @@ Ecran::Ecran()
         OptionMenu pause[3] = {option5, option6, option7};
         Color pausecolors[3] = { pause[0].getColor(), pause[1].getColor(), pause[2].getColor()};
 
+        //initialisation des sons musique
+        InitAudioDevice();
+        Sound sound = LoadSound("audio_menu.wav");
+        Sound sound2 = LoadSound("audio_jeu.mp3");
+        Sound sound3 = LoadSound("tir.wav");
+        Sound sound4 = LoadSound("explosion.wav");
+        Sound sound5 = LoadSound("game_over.mp3");
+
+
+        //PlaySoundMulti(sound3);
+        //PlaySoundMulti(sound4);
+        //PlaySoundMulti(sound5);
+
+
+        PlaySoundMulti(sound);
+
         //début de la fenêtre
         while (!WindowShouldClose())
         {
@@ -107,6 +123,7 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran d'accueil --------------------------------------------------------------------------------------------------
             */
             while (res == 0) {
+
                 BeginDrawing();
                 ClearBackground(color);
 
@@ -136,6 +153,8 @@ Ecran::Ecran()
                     if (selection == 0) {
                         // Lancer le jeu
                         res = 1;
+                        StopSoundMulti();
+                        PlaySoundMulti(sound2);
                     }
                     else if (selection == 1) {
                         // Ouvrir la page Highscores
@@ -163,11 +182,12 @@ Ecran::Ecran()
 
             /*
                 -------------------------------------------------------------------------Ecran de Jeu --------------------------------------------------------------------------------------------------            
-            */
+            */        
 
             Jeu j;
 
             while (res == 1) {
+
 
                 //affiachage du haut de l'ecran
                 EnableCursor();
@@ -226,11 +246,13 @@ Ecran::Ecran()
                 int a, b, c, d;
                 DrawPolyLines(pointeur, 3, 20, angle, WHITE);
 
-                j.collisionCurseur(pointeur.x,pointeur.y, angle);
-
                 j.avancement();
                 j.renduAsteroids();
 
+                if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
+                    StopSoundMulti();
+                    PlaySoundMulti(sound5);
+                }
 
 
 
@@ -278,6 +300,8 @@ Ecran::Ecran()
                             pointeur.x = x * 0.5;
                             pointeur.y = y * 0.5;
                             res = 0;
+                            StopSoundMulti();
+                            PlaySoundMulti(sound);
                         }
                     }
 
@@ -401,6 +425,11 @@ Ecran::Ecran()
                     }
                     if (IsKeyPressed(KEY_ENTER)) {
                         musicON = selectionMusic;
+                        if(musicON%2==1)
+                            StopSoundMulti();
+                        else
+                            PlaySoundMulti(sound2);
+
                     }
                     break;
                 case 3:
@@ -429,6 +458,13 @@ Ecran::Ecran()
             }
 
         }
+        //Arret des sons
+        UnloadSound(sound);
+        UnloadSound(sound2);
+        UnloadSound(sound3);
+        UnloadSound(sound4);
+        UnloadSound(sound5);
+        CloseAudioDevice();
 
         CloseWindow();
     }
