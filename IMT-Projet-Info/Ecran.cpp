@@ -7,6 +7,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "optionMenu.h"
+#include "Jeu.h"
 
 using namespace std;
 
@@ -105,7 +106,7 @@ Ecran::Ecran()
             /*
                 -------------------------------------------------------------------------Ecran d'accueil --------------------------------------------------------------------------------------------------
             */
-            if (res == 0) {
+            while (res == 0) {
                 BeginDrawing();
                 ClearBackground(color);
 
@@ -164,8 +165,9 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran de Jeu --------------------------------------------------------------------------------------------------            
             */
 
+            Jeu j;
 
-            else if (res == 1) {
+            while (res == 1) {
 
                 //affiachage du haut de l'ecran
                 EnableCursor();
@@ -174,19 +176,12 @@ Ecran::Ecran()
                 int test = MeasureText("ASTEROID", 50);
                 DrawText("ASTEROID", GetScreenWidth() * 0.5 - (test * 0.5), GetScreenHeight() * 0.05, 50, WHITE);
                 DrawText("Press P for pause", GetScreenWidth() * 0.85 - (test * 0.5), GetScreenHeight() * 0.05, 30, WHITE);
-
                 DrawLine(0, GetScreenHeight() * 0.1, GetScreenWidth(), GetScreenHeight() * 0.1, WHITE);
-                
-
 
                 float angle = GetGestureDragAngle();
-
                 double pi = 3.1415;
-
                 int sourisx = GetMouseX();
                 int sourisy = GetMouseY();
-
-
                 //calculs pour que le pointeur suive la souris 
                 if (sourisx == pointeur.x) {
                     if (sourisy < pointeur.y) {
@@ -196,7 +191,6 @@ Ecran::Ecran()
                         angle = 180;
                     }
                     else angle = 180;
-
                 }
                 else {
                     if (sourisx > pointeur.x) {
@@ -204,15 +198,11 @@ Ecran::Ecran()
                     }
                     else if (sourisx < pointeur.x) {
                         angle = 360 - (270 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));
-
                     }
                     else
                         angle = 0;
                 }
-
-
                 //déplacer le pointeur quand on appuye sur le pavé directionnel
-                cout << (int)y * 0.1 << "\n";
                 if (IsKeyDown(265) && ((int)pointeur.y == (int)(y * 0.1) || (int)(pointeur.y - 1) == (int)(y * 0.1))) pointeur.y = y;
                 else if (IsKeyDown(265))pointeur.y -= 2;
 
@@ -231,214 +221,210 @@ Ecran::Ecran()
                     EndDrawing();
                     res = 2;
                 }
-
-
-
-
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
                 DrawPolyLines(pointeur, 3, 20, angle, WHITE);
 
+                j.collisionCurseur(pointeur.x,pointeur.y, angle);
 
-                //afficher les tirs
-                a = pointeur.x;
-                b = pointeur.y;
-                c = sourisx - pointeur.x + 1;
-                d = sourisy - pointeur.y + 1;
-                int time;
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    DrawCircle(a, b, 3, WHITE);
-                    element = true;
-                    time = GetTime();
+                j.avancement();
+                j.renduAsteroids();
+
+
+
+
+                /*
+                -------------------------------------------------------------------------Ecran de Pause --------------------------------------------------------------------------------------------------
+                */
+
+                while (res == 2) {
+
+                    BeginDrawing();
+
+                    //déplacement entre les différents menus avec les touches up et down
+                    if (IsKeyPressed(KEY_DOWN) && selection2 < 2) {
+                        pausecolors[selection2] = WHITE;
+                        pause[selection2].setSelection(false);
+
+                        pausecolors[selection2 + 1] = RED;
+                        pause[selection2 + 1].setSelection(true);
+
+                        selection2++;
+                    }
+
+                    if (IsKeyPressed(KEY_UP) && selection2 > 0) {
+                        pausecolors[selection2] = WHITE;
+                        pause[selection2].setSelection(false);
+
+                        pausecolors[selection2 - 1] = RED;
+                        pause[selection2 - 1].setSelection(true);
+                        selection2--;
+                    }
+
+
+                    //changer l'ecran selon le menu activé
+                    if (IsKeyPressed(KEY_ENTER)) {
+
+                        if (selection2 == 0) {
+                            // Lancer le jeu
+                            res = 1;
+                        }
+                        else if (selection2 == 1) {
+                            // Ouvrir la page Settings
+                        }
+                        else if (selection2 == 2) {
+                            // Ouvrir le menu
+                            pointeur.x = x * 0.5;
+                            pointeur.y = y * 0.5;
+                            res = 0;
+                        }
+                    }
+
+                    //position des menus sur l'ecran
+                    DrawText(option5.getString(), option5.getPosition(x), y * 0.35, 40, pausecolors[0]);
+                    DrawText(option6.getString(), option6.getPosition(x), y * 0.35 + y * 0.1, 40, pausecolors[1]);
+                    DrawText(option7.getString(), option7.getPosition(x), y * 0.35 + y * 0.2, 40, pausecolors[2]);
+                    EndDrawing();
 
                 }
-                if (element && GetTime()-time > 10) {
-                    
-                    DrawCircle(c, d, 3, WHITE);
-                    c ++;
-                    d++;
-                    time = GetTime();
 
+
+                EndDrawing();
+            }
+
+            
+
+
+            /*
+                ------------------------------------------------------------------------- Ecran de Highscores ----------------------------------------------------------------------------------------------
+            */
+
+            while (res == 3) {
+                // Page Highscores
+                BeginDrawing();
+                ClearBackground(color);
+
+                DrawText(("%c", s2), x / 2 - tailleS2 / 2, 100, 120, WHITE);
+                for (int i = 0; i < 5;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 4, 300+100*i, 40, GRAY);
                 }
+                for (int i = 5; i < 10;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 2, 300 + 100 * (i-5), 40, GRAY);
+                }
+                for (int i = 10; i < 15;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), 3*x / 4, 300 + 100 * (i - 10), 40, GRAY);
+                }
+
+                DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 150, 40, RED);
+                if (IsKeyPressed(KEY_ENTER)) {
+                    res = 0;
+                }
+            
                 EndDrawing();
             }
 
             /*
-                -------------------------------------------------------------------------Ecran de Pause --------------------------------------------------------------------------------------------------
+                ------------------------------------------------------------------------- Ecran de Settings ------------------------------------------------------------------------------------------------
             */
 
+            while (res == 4) {
 
-            else if (res == 2) {
+                BeginDrawing();
+                ClearBackground(color);
 
-            BeginDrawing();
+                //déplacement entre les différents menus avec les touches up et down
+                if (IsKeyPressed(KEY_DOWN) && selectionSettings < 3) {
+                    tabColorsSettings[selectionSettings] = WHITE;
+                    optionsSettings[selectionSettings].setSelection(false);
 
-            //déplacement entre les différents menus avec les touches up et down
-            if (IsKeyPressed(KEY_DOWN) && selection2 < 2) {
-                pausecolors[selection2] = WHITE;
-                pause[selection2].setSelection(false);
+                    tabColorsSettings[selectionSettings + 1] = RED;
+                    optionsSettings[selectionSettings + 1].setSelection(true);
 
-                pausecolors[selection2 + 1] = RED;
-                pause[selection2 + 1].setSelection(true);
-
-                selection2++;
-            }
-
-            if (IsKeyPressed(KEY_UP) && selection2 > 0) {
-                pausecolors[selection2] = WHITE;
-                pause[selection2].setSelection(false);
-
-                pausecolors[selection2 - 1] = RED;
-                pause[selection2 - 1].setSelection(true);
-                selection2--;
-            }
-
-
-            //changer l'ecran selon le menu activé
-            if (IsKeyPressed(KEY_ENTER)) {
-
-                if (selection2 == 0) {
-                    // Lancer le jeu
-                    res = 1;
-                }
-                else if (selection2 == 1) {
-                    // Ouvrir la page Settings
-                }
-                else if (selection2 == 2) {
-                    // Ouvrir le menu
-                    pointeur.x = x * 0.5;
-                    pointeur.y = y * 0.5;
-                    res = 0;
-                }
-            }
-
-            //position des menus sur l'ecran
-            DrawText(option5.getString(), option5.getPosition(x), y * 0.35, 40, pausecolors[0]);
-            DrawText(option6.getString(), option6.getPosition(x), y * 0.35 + y * 0.1, 40, pausecolors[1]);
-            DrawText(option7.getString(), option7.getPosition(x), y * 0.35 + y * 0.2, 40, pausecolors[2]);
-            EndDrawing();
-
-            }
-            else if (res == 3) {
-            // Page Highscores
-            BeginDrawing();
-            ClearBackground(color);
-
-            DrawText(("%c", s2), x / 2 - tailleS2 / 2, 100, 120, WHITE);
-            for (int i = 0; i < 5;i++) {
-                DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 4, 300+100*i, 40, GRAY);
-            }
-            for (int i = 5; i < 10;i++) {
-                DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 2, 300 + 100 * (i-5), 40, GRAY);
-            }
-            for (int i = 10; i < 15;i++) {
-                DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), 3*x / 4, 300 + 100 * (i - 10), 40, GRAY);
-            }
-
-            DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 150, 40, RED);
-            if (IsKeyPressed(KEY_ENTER)) {
-                res = 0;
-            }
-            
-            EndDrawing();
-            }
-            else if (res == 4) {
-
-            BeginDrawing();
-            ClearBackground(color);
-
-            //déplacement entre les différents menus avec les touches up et down
-            if (IsKeyPressed(KEY_DOWN) && selectionSettings < 3) {
-                tabColorsSettings[selectionSettings] = WHITE;
-                optionsSettings[selectionSettings].setSelection(false);
-
-                tabColorsSettings[selectionSettings + 1] = RED;
-                optionsSettings[selectionSettings + 1].setSelection(true);
-
-                selectionSettings++;
-            }
-
-            if (IsKeyPressed(KEY_UP) && selectionSettings > 0) {
-                tabColorsSettings[selectionSettings] = WHITE;
-                optionsSettings[selectionSettings].setSelection(false);
-
-                tabColorsSettings[selectionSettings - 1] = RED;
-                optionsSettings[selectionSettings - 1].setSelection(true);
-                selectionSettings--;
-            }
-
-            switch(selectionSettings){
-            case 0:
-                //DISPLAY
-                if (IsKeyPressed(KEY_RIGHT) && selectionDisplay < 1) {
-                    selectionDisplay++;
+                    selectionSettings++;
                 }
 
-                if (IsKeyPressed(KEY_LEFT) && selectionDisplay > 0) {
-                    selectionDisplay--;
+                if (IsKeyPressed(KEY_UP) && selectionSettings > 0) {
+                    tabColorsSettings[selectionSettings] = WHITE;
+                    optionsSettings[selectionSettings].setSelection(false);
+
+                    tabColorsSettings[selectionSettings - 1] = RED;
+                    optionsSettings[selectionSettings - 1].setSelection(true);
+                    selectionSettings--;
                 }
-                if (selectionDisplay == 0) {
-                    if (IsKeyPressed(KEY_ENTER) && fullScreen == 1) {
-                        ToggleFullscreen();
-                        fullScreen = selectionDisplay;
+
+                switch(selectionSettings){
+                case 0:
+                    //DISPLAY
+                    if (IsKeyPressed(KEY_RIGHT) && selectionDisplay < 1) {
+                        selectionDisplay++;
                     }
-                }
-                else {
-                    if (IsKeyPressed(KEY_ENTER) && fullScreen == 0) {
-                        ToggleFullscreen();
-                        fullScreen = selectionDisplay;
+
+                    if (IsKeyPressed(KEY_LEFT) && selectionDisplay > 0) {
+                        selectionDisplay--;
                     }
-                }
+                    if (selectionDisplay == 0) {
+                        if (IsKeyPressed(KEY_ENTER) && fullScreen == 1) {
+                            ToggleFullscreen();
+                            fullScreen = selectionDisplay;
+                        }
+                    }
+                    else {
+                        if (IsKeyPressed(KEY_ENTER) && fullScreen == 0) {
+                            ToggleFullscreen();
+                            fullScreen = selectionDisplay;
+                        }
+                    }
                 
-                break;
-            case 1:
-                // Difficulty
-                if (IsKeyPressed(KEY_RIGHT) && selectionDifficulty < 2) {
-                    selectionDifficulty++;
+                    break;
+                case 1:
+                    // Difficulty
+                    if (IsKeyPressed(KEY_RIGHT) && selectionDifficulty < 2) {
+                        selectionDifficulty++;
+                    }
+
+                    if (IsKeyPressed(KEY_LEFT) && selectionDifficulty > 0) {
+                        selectionDifficulty--;
+                    }
+                    if (IsKeyPressed(KEY_ENTER)) {
+                        difficultyLevel = selectionDifficulty;
+                    }
+                    break;
+                case 2:
+                    // Music
+                    if (IsKeyPressed(KEY_RIGHT) && selectionMusic < 1) {
+                        selectionMusic++;
+                    }
+
+                    if (IsKeyPressed(KEY_LEFT) && selectionMusic > 0) {
+                        selectionMusic--;
+                    }
+                    if (IsKeyPressed(KEY_ENTER)) {
+                        musicON = selectionMusic;
+                    }
+                    break;
+                case 3:
+                    if (IsKeyPressed(KEY_ENTER)) {
+                        selectionDisplay = fullScreen;
+                        selectionDifficulty = difficultyLevel;
+                        selectionMusic = musicON;
+                        res = 0;
+                    }
+                    break;
+                default:
+                    break;
                 }
 
-                if (IsKeyPressed(KEY_LEFT) && selectionDifficulty > 0) {
-                    selectionDifficulty--;
-                }
-                if (IsKeyPressed(KEY_ENTER)) {
-                    difficultyLevel = selectionDifficulty;
-                }
-                break;
-            case 2:
-                // Music
-                if (IsKeyPressed(KEY_RIGHT) && selectionMusic < 1) {
-                    selectionMusic++;
-                }
-
-                if (IsKeyPressed(KEY_LEFT) && selectionMusic > 0) {
-                    selectionMusic--;
-                }
-                if (IsKeyPressed(KEY_ENTER)) {
-                    musicON = selectionMusic;
-                }
-                break;
-            case 3:
-                if (IsKeyPressed(KEY_ENTER)) {
-                    selectionDisplay = fullScreen;
-                    selectionDifficulty = difficultyLevel;
-                    selectionMusic = musicON;
-                    res = 0;
-                }
-                break;
-            default:
-                break;
-            }
-
-            //position des menus sur l'ecran
-            DrawText(("%c", s1), x / 2 - tailleS1 / 2, 100, 120, WHITE);
-            DrawText(optionSettings1.getString(), optionSettings1.getPosition(x), y * 0.35, 40, tabColorsSettings[0]);
-            DrawText(displayTab[selectionDisplay], optionSettings1.getPosition(x) + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
-            DrawText(optionSettings2.getString(), optionSettings2.getPosition(x), y * 0.35 + y * 0.1, 40, tabColorsSettings[1]);
-            DrawText(difficultyTab[selectionDifficulty], optionSettings2.getPosition(x) +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
-            DrawText(optionSettings3.getString(), optionSettings3.getPosition(x), y * 0.35 + y * 0.2, 40, tabColorsSettings[2]);
-            DrawText(musicTab[selectionMusic], optionSettings3.getPosition(x) +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
-            DrawText(optionSettings4.getString(), optionSettings4.getPosition(x), y * 0.35 + y * 0.3, 40, tabColorsSettings[3]);
-            EndDrawing();
+                //position des menus sur l'ecran
+                DrawText(("%c", s1), x / 2 - tailleS1 / 2, 100, 120, WHITE);
+                DrawText(optionSettings1.getString(), optionSettings1.getPosition(x), y * 0.35, 40, tabColorsSettings[0]);
+                DrawText(displayTab[selectionDisplay], optionSettings1.getPosition(x) + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
+                DrawText(optionSettings2.getString(), optionSettings2.getPosition(x), y * 0.35 + y * 0.1, 40, tabColorsSettings[1]);
+                DrawText(difficultyTab[selectionDifficulty], optionSettings2.getPosition(x) +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
+                DrawText(optionSettings3.getString(), optionSettings3.getPosition(x), y * 0.35 + y * 0.2, 40, tabColorsSettings[2]);
+                DrawText(musicTab[selectionMusic], optionSettings3.getPosition(x) +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
+                DrawText(optionSettings4.getString(), optionSettings4.getPosition(x), y * 0.35 + y * 0.3, 40, tabColorsSettings[3]);
+                EndDrawing();
 
             }
 
