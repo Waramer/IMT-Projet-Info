@@ -24,6 +24,9 @@ Ecran::Ecran()
         int fullScreen = 0;
         int musicON = 0;
         int selection2 = 0;
+        int selectionGameOver = 0;
+
+        int score = 0;
 
 
         //initialisation de la fenêtre
@@ -63,7 +66,7 @@ Ecran::Ecran()
         OptionMenu optionSettings1("FULL SCREEN : ", true);
         OptionMenu optionSettings2("DIFFICULTY : ", false);
         OptionMenu optionSettings3("MUSIC : ", false);
-        OptionMenu optionSettings4("RETURN TO MENU", false);
+        OptionMenu optionSettings4("MAIN SCREEN", false);
         OptionMenu optionsSettings[4] = { optionSettings1, optionSettings2, optionSettings3, optionSettings4 };
         Color tabColorsSettings[4] = { optionsSettings[0].getColor(),optionsSettings[1].getColor() ,optionsSettings[2].getColor(),optionsSettings[3].getColor() };
 
@@ -78,9 +81,25 @@ Ecran::Ecran()
         // Tableau des scores trié
 
         int scoresTab[15] = {5500, 4256, 4214, 4053, 3501, 2798, 2435, 1789, 1456, 1234,880,756,526,128,42};
+        int highscore = scoresTab[0];
         char* scoresTabChar[15];
 
+        // Menu Game Over
 
+        const char* s4 = "GAME OVER";
+        int tailleS4 = MeasureText(s4, 200);
+
+        const char* s5 = "YOUR SCORE : 0";
+        int tailleS5 = MeasureText(s5, 75);
+
+        const char* s6 = "HIGHSCORE : 5500";
+        int tailleS6 = MeasureText(s5, 75);
+
+
+        OptionMenu optionGameOver1("RESTART GAME", true);
+        OptionMenu optionGameOver2("MAIN SCREEN", false);
+        OptionMenu optionsGameOver[2] = { optionGameOver1, optionGameOver2 };
+        Color tabColorsGameOver[2] = { optionsGameOver[0].getColor(), optionsGameOver[1].getColor() };
 
         // choix options
         const char* displayTab[2] = { "OFF","ON" };
@@ -153,6 +172,8 @@ Ecran::Ecran()
                     if (selection == 0) {
                         // Lancer le jeu
                         res = 1;
+                        pointeur.x = x * 0.5;
+                        pointeur.y = y * 0.5;
                         StopSoundMulti();
                         PlaySoundMulti(sound2);
                     }
@@ -166,6 +187,7 @@ Ecran::Ecran()
                     }
                     else if (selection == 3) {
                         // Quitter le jeu
+                        StopSoundMulti();
                         break;
 
                     }
@@ -173,10 +195,10 @@ Ecran::Ecran()
 
                 //position des menus sur l'ecran
                 DrawText(("%c", s0), x / 2 - tailleS0 / 2, 100, 120, WHITE);
-                DrawText(option1.getString(), option1.getPosition(x), y * 0.35, 40, tabcolors[0]);
-                DrawText(option2.getString(), option2.getPosition(x), y * 0.35 + y * 0.1, 40, tabcolors[1]);
-                DrawText(option3.getString(), option3.getPosition(x), y * 0.35 + y * 0.2, 40, tabcolors[2]);
-                DrawText(option4.getString(), option4.getPosition(x), y * 0.35 + y * 0.3, 40, tabcolors[3]);
+                for (int i = 0; i < 4;i++) {
+                    DrawText(options[i].getString(), options[i].getPosition(x), y * 0.35 + i*y*0.1, 40, tabcolors[i]);
+                }
+                
                 EndDrawing();
             }
 
@@ -202,6 +224,7 @@ Ecran::Ecran()
                 double pi = 3.1415;
                 int sourisx = GetMouseX();
                 int sourisy = GetMouseY();
+                
                 //calculs pour que le pointeur suive la souris 
                 if (sourisx == pointeur.x) {
                     if (sourisy < pointeur.y) {
@@ -249,6 +272,7 @@ Ecran::Ecran()
                 j.avancement(pointeur.x,pointeur.y,angle);
 
                 if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
+                    res = 5;
                     StopSoundMulti();
                     PlaySoundMulti(sound5);
                 }
@@ -290,6 +314,8 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
+                            pointeur.x = x * 0.5;
+                            pointeur.y = y * 0.5;
                         }
                         else if (selection2 == 1) {
                             // Ouvrir la page Settings
@@ -427,7 +453,7 @@ Ecran::Ecran()
                         if(musicON%2==1)
                             StopSoundMulti();
                         else
-                            PlaySoundMulti(sound2);
+                            PlaySoundMulti(sound);
 
                     }
                     break;
@@ -445,15 +471,63 @@ Ecran::Ecran()
 
                 //position des menus sur l'ecran
                 DrawText(("%c", s1), x / 2 - tailleS1 / 2, 100, 120, WHITE);
-                DrawText(optionSettings1.getString(), optionSettings1.getPosition(x), y * 0.35, 40, tabColorsSettings[0]);
+               
+
+                for (int i = 0; i < 4;i++) {
+                    DrawText(optionsSettings[i].getString(), optionsSettings[i].getPosition(x), y * 0.35 + y*0.1*i, 40, tabColorsSettings[i]);
+                }
+
                 DrawText(displayTab[selectionDisplay], optionSettings1.getPosition(x) + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
-                DrawText(optionSettings2.getString(), optionSettings2.getPosition(x), y * 0.35 + y * 0.1, 40, tabColorsSettings[1]);
                 DrawText(difficultyTab[selectionDifficulty], optionSettings2.getPosition(x) +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
-                DrawText(optionSettings3.getString(), optionSettings3.getPosition(x), y * 0.35 + y * 0.2, 40, tabColorsSettings[2]);
                 DrawText(musicTab[selectionMusic], optionSettings3.getPosition(x) +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
-                DrawText(optionSettings4.getString(), optionSettings4.getPosition(x), y * 0.35 + y * 0.3, 40, tabColorsSettings[3]);
                 EndDrawing();
 
+            }
+            while (res == 5) {
+                BeginDrawing();
+                ClearBackground(BLACK);
+                if (IsKeyPressed(KEY_DOWN) && selectionGameOver < 2) {
+                    tabColorsGameOver[selectionGameOver] = WHITE;
+                    optionsGameOver[selectionGameOver].setSelection(false);
+
+                    tabColorsGameOver[selectionGameOver + 1] = RED;
+                    optionsGameOver[selectionGameOver + 1].setSelection(true);
+
+                    selectionGameOver++;
+                }
+
+                if (IsKeyPressed(KEY_UP) && selectionGameOver > 0) {
+                    tabColorsGameOver[selectionGameOver] = WHITE;
+                    optionsGameOver[selectionGameOver].setSelection(false);
+
+                    tabColorsGameOver[selectionGameOver - 1] = RED;
+                    optionsGameOver[selectionGameOver - 1].setSelection(true);
+                    selectionGameOver--;
+                }
+
+                if (IsKeyPressed(KEY_ENTER)) {
+                    if (selectionGameOver == 0) {
+                        res = 1;
+                        pointeur.x = x * 0.5;
+                        pointeur.y = y * 0.5;
+                        StopSoundMulti();
+                        PlaySoundMulti(sound2);
+                    }
+                    else {
+                        res = 0;
+                        StopSoundMulti();
+                        PlaySoundMulti(sound);
+                    }
+                }
+
+                DrawText(("%c", s4), x / 2 - tailleS4 / 2, 100, 200, RED);
+                DrawText(("%c", s5), x / 2 - tailleS5 / 2, 350, 75, GRAY); 
+                DrawText(("%c", s6), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                for (int i = 0;i < 2;i++) {
+                    DrawText(optionsGameOver[i].getString(), optionsGameOver[i].getPosition(x), y * 0.6+y*i*0.1, 40, tabColorsGameOver[i]);
+                }
+                
+                EndDrawing();
             }
 
         }
