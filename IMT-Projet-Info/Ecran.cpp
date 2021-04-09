@@ -100,6 +100,22 @@ Ecran::Ecran()
         OptionMenu pause[3] = {option5, option6, option7};
         Color pausecolors[3] = { pause[0].getColor(), pause[1].getColor(), pause[2].getColor()};
 
+        //initialisation des sons musique
+        InitAudioDevice();
+        Sound sound = LoadSound("audio_menu.wav");
+        Sound sound2 = LoadSound("audio_jeu.mp3");
+        Sound sound3 = LoadSound("tir.wav");
+        Sound sound4 = LoadSound("explosion.wav");
+        Sound sound5 = LoadSound("game_over.mp3");
+
+
+        //PlaySoundMulti(sound3);
+        //PlaySoundMulti(sound4);
+        //PlaySoundMulti(sound5);
+
+
+        PlaySoundMulti(sound);
+
         //début de la fenêtre
         while (!WindowShouldClose())
         {
@@ -107,6 +123,7 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran d'accueil --------------------------------------------------------------------------------------------------
             */
             while (res == 0) {
+
                 BeginDrawing();
                 ClearBackground(color);
 
@@ -136,6 +153,8 @@ Ecran::Ecran()
                     if (selection == 0) {
                         // Lancer le jeu
                         res = 1;
+                        StopSoundMulti();
+                        PlaySoundMulti(sound2);
                     }
                     else if (selection == 1) {
                         // Ouvrir la page Highscores
@@ -163,11 +182,12 @@ Ecran::Ecran()
 
             /*
                 -------------------------------------------------------------------------Ecran de Jeu --------------------------------------------------------------------------------------------------            
-            */
+            */        
 
             Jeu j;
 
             while (res == 1) {
+
 
                 //affiachage du haut de l'ecran
                 EnableCursor();
@@ -178,44 +198,59 @@ Ecran::Ecran()
                 DrawText("Press P for pause", GetScreenWidth() * 0.85 - (test * 0.5), GetScreenHeight() * 0.05, 30, WHITE);
                 DrawLine(0, GetScreenHeight() * 0.1, GetScreenWidth(), GetScreenHeight() * 0.1, WHITE);
 
-                // ----------- Mouvement du joueur -----------
                 float angle = GetGestureDragAngle();
                 double pi = 3.1415;
                 int sourisx = GetMouseX();
                 int sourisy = GetMouseY();
                 //calculs pour que le pointeur suive la souris 
                 if (sourisx == pointeur.x) {
-                    if (sourisy < pointeur.y) {angle = 360; }
-                    else if (sourisy > pointeur.y) {angle = 180;}
+                    if (sourisy < pointeur.y) {
+                        angle = 360;
+                    }
+                    else if (sourisy > pointeur.y) {
+                        angle = 180;
+                    }
                     else angle = 180;
                 }
                 else {
-                    if (sourisx > pointeur.x) {angle = 360 - (90 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));}
-                    else if (sourisx < pointeur.x) {angle = 360 - (270 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));}
-                    else angle = 0;
+                    if (sourisx > pointeur.x) {
+                        angle = 360 - (90 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));
+                    }
+                    else if (sourisx < pointeur.x) {
+                        angle = 360 - (270 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));
+                    }
+                    else
+                        angle = 0;
                 }
                 //déplacer le pointeur quand on appuye sur le pavé directionnel
                 if (IsKeyDown(265) && ((int)pointeur.y == (int)(y * 0.1) || (int)(pointeur.y - 1) == (int)(y * 0.1))) pointeur.y = y;
                 else if (IsKeyDown(265))pointeur.y -= 2;
+
                 if (IsKeyDown(262) && pointeur.x == x)pointeur.x = 0;
                 else if (IsKeyDown(262))pointeur.x += 2;
+
                 if (IsKeyDown(263) && pointeur.x == 0)pointeur.x = x;
                 else if (IsKeyDown(263))pointeur.x -= 2;
-                if (IsKeyDown(264) && ((int)pointeur.y == y || (int)(pointeur.y + 1 == y))) {pointeur.y = y * 0.1;}
+
+                if (IsKeyDown(264) && ((int)pointeur.y == y || (int)(pointeur.y + 1 == y))) {
+                    pointeur.y = y * 0.1;
+                }
                 else if (IsKeyDown(264))pointeur.y += 2;
+
+                if (IsKeyDown(KEY_P)) {
+                    EndDrawing();
+                    res = 2;
+                }
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
                 DrawPolyLines(pointeur, 3, 20, angle, WHITE);
-                
-                // ----------- Avancment du jeu -----------
 
-                j.avancement(pointeur.x,pointeur.y, angle);
+                j.avancement(pointeur.x,pointeur.y,angle);
 
-                // Pause
-                if (IsKeyDown(KEY_P)) {
-                    EndDrawing();
-                    res = 2;
+                if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
+                    StopSoundMulti();
+                    PlaySoundMulti(sound5);
                 }
 
 
@@ -264,6 +299,8 @@ Ecran::Ecran()
                             pointeur.x = x * 0.5;
                             pointeur.y = y * 0.5;
                             res = 0;
+                            StopSoundMulti();
+                            PlaySoundMulti(sound);
                         }
                     }
 
@@ -387,6 +424,11 @@ Ecran::Ecran()
                     }
                     if (IsKeyPressed(KEY_ENTER)) {
                         musicON = selectionMusic;
+                        if(musicON%2==1)
+                            StopSoundMulti();
+                        else
+                            PlaySoundMulti(sound2);
+
                     }
                     break;
                 case 3:
@@ -415,6 +457,13 @@ Ecran::Ecran()
             }
 
         }
+        //Arret des sons
+        UnloadSound(sound);
+        UnloadSound(sound2);
+        UnloadSound(sound3);
+        UnloadSound(sound4);
+        UnloadSound(sound5);
+        CloseAudioDevice();
 
         CloseWindow();
     }
