@@ -12,9 +12,14 @@ public:
 	Jeu();
 	void nextFrame();
 	void avancement(int curs_x, int curs_y, double angle);
+	void avancementCurseur(int curs_x, int curs_y, double angle);
+	void avancementTirs(int curs_x, int curs_y, double angle);
+	void avancementAsteroid();
 	void renduAsteroids();
 	bool collisionCurseur(int curs_x, int curs_y, double angle);
 	bool pointDansCurseur(Point point);
+
+	void tirsAuBut();
 
 private:
 	std::vector<Asteroid> j_asteroids;

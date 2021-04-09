@@ -9,43 +9,70 @@ Jeu::Jeu()
 	j_timer = 0;
 	j_nbAsteroids = 10;
 	j_asteroids.push_back(Asteroid(10, 50));
-	j_curseur.push_back(Point(500, 500));
-	j_curseur.push_back(Point(500, 500));
-	j_curseur.push_back(Point(500, 500));
+	j_curseur.push_back(Point(500, 490));
+	j_curseur.push_back(Point(510, 500));
+	j_curseur.push_back(Point(490, 500));
 }
 
 void Jeu::nextFrame() {
 }
 
+// Avanvancement du jeu en général
 void Jeu::avancement(int curs_x, int curs_y, double angle)
 {
+	avancementTirs(curs_x, curs_y, angle);
+	avancementCurseur(curs_x, curs_y, angle);
+	avancementAsteroid();
+	collisionCurseur(curs_x, curs_y, angle);
+	tirsAuBut();
+}
+
+// avancement du curseur
+void Jeu::avancementCurseur(int curs_x, int curs_y, double angle) {
+
+}
+
+// avancement des tirs
+void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
+	for (int i = 0; i < j_tirs.size(); i++) {
+		// mouvement
+		j_tirs[i].move();
+		// rendu graphique
+		j_tirs[i].rendu();
+		// sortie d'écran
+		if ((j_tirs[i].getX() < 0) || (j_tirs[i].getX() > GetScreenWidth()) || (j_tirs[i].getY() < GetScreenHeight() * 0.09) || (j_tirs[i].getY() > GetScreenHeight())) {
+			j_tirs.erase(j_tirs.begin() + i);
+		}
+	}
+	// ajout de tir
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+		j_tirs.push_back(Tir(curs_x, curs_y, angle));
+	}
+	DrawText(TextFormat("Nb Tirs : %i", j_tirs.size()), GetScreenWidth() * 0.06, GetScreenHeight() * 0.06, 30, WHITE);
+}
+
+// avancement des asteroids
+void Jeu::avancementAsteroid() {
+	// ajout asteroid
 	if (j_asteroids.size() < j_nbAsteroids) {
 		j_asteroids.push_back(Asteroid(10, 50));
 	}
-	DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.05, 50, WHITE);
 	for (int i = j_asteroids.size() - 1; i >= 0; i--) {
-		if ((j_asteroids[i].getPosX() < 0)||(j_asteroids[i].getPosX() > GetScreenWidth())||(j_asteroids[i].getPosY() < GetScreenHeight()*0.09)||(j_asteroids[i].getPosY() > GetScreenHeight())) {
-			j_asteroids.erase(j_asteroids.begin()+i);
+		// mouvement
+		j_asteroids[i].move();
+		// Sortie d'écran
+		if ((j_asteroids[i].getPosX() < 0) || (j_asteroids[i].getPosX() > GetScreenWidth()) || (j_asteroids[i].getPosY() < GetScreenHeight() * 0.09) || (j_asteroids[i].getPosY() > GetScreenHeight())) {
+			j_asteroids.erase(j_asteroids.begin() + i);
 		}
-		else {
-			j_asteroids[i].move();
-		}
 	}
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-		j_tirs.push_back(Tir(curs_x,curs_y,angle));
-	}
-	for (int i = 0; i < j_tirs.size(); i++) {
-		j_tirs[i].move();
-		j_tirs[i].rendu();
-	}
-}
-
-void Jeu::renduAsteroids() {
+	DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.02, 30, WHITE);
 	for (int i = 0; i < j_asteroids.size(); i++) {
 		j_asteroids[i].renduAsteroid();
+
 	}
 }
 
+// Détection d'une collision entre le joueur et un asteroid
 bool Jeu::collisionCurseur(int curs_x,int curs_y,double angle) {
 	for (int ast = 0; ast < j_asteroids.size(); ast++) {
 		if (sqrt(pow(curs_x-j_asteroids[ast].getPosX(),2)+pow(curs_y - j_asteroids[ast].getPosY(),2)) <= (j_asteroids[ast].getRayon()*sqrt(2)+20) ) {
@@ -67,6 +94,7 @@ bool Jeu::collisionCurseur(int curs_x,int curs_y,double angle) {
 	return false;
 }
 
+// Détection d'un point dans le curseur
 bool Jeu::pointDansCurseur(Point point)
 {
 	//1e angle de vue
@@ -110,4 +138,18 @@ bool Jeu::pointDansCurseur(Point point)
 		}
 	}
 	return true;
+}
+
+// détection d'un tir dans un astéroid
+void Jeu::tirsAuBut() {
+	for (int aste = j_asteroids.size() - 1; aste >= 0; aste--) {
+		for (int tir = 0; tir < j_tirs.size(); tir++) {
+			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX()-j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
+				j_asteroids.erase(j_asteroids.begin() + aste);
+				j_tirs.erase(j_tirs.begin() + tir);
+				DrawText("Good Shot !", GetScreenWidth() * 0.05, GetScreenHeight() * 0.25, 50, WHITE);
+				break;
+			}
+		}
+	}
 }

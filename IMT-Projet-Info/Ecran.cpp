@@ -178,58 +178,47 @@ Ecran::Ecran()
                 DrawText("Press P for pause", GetScreenWidth() * 0.85 - (test * 0.5), GetScreenHeight() * 0.05, 30, WHITE);
                 DrawLine(0, GetScreenHeight() * 0.1, GetScreenWidth(), GetScreenHeight() * 0.1, WHITE);
 
+                // ----------- Mouvement du joueur -----------
                 float angle = GetGestureDragAngle();
                 double pi = 3.1415;
                 int sourisx = GetMouseX();
                 int sourisy = GetMouseY();
                 //calculs pour que le pointeur suive la souris 
                 if (sourisx == pointeur.x) {
-                    if (sourisy < pointeur.y) {
-                        angle = 360;
-                    }
-                    else if (sourisy > pointeur.y) {
-                        angle = 180;
-                    }
+                    if (sourisy < pointeur.y) {angle = 360; }
+                    else if (sourisy > pointeur.y) {angle = 180;}
                     else angle = 180;
                 }
                 else {
-                    if (sourisx > pointeur.x) {
-                        angle = 360 - (90 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));
-                    }
-                    else if (sourisx < pointeur.x) {
-                        angle = 360 - (270 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));
-                    }
-                    else
-                        angle = 0;
+                    if (sourisx > pointeur.x) {angle = 360 - (90 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));}
+                    else if (sourisx < pointeur.x) {angle = 360 - (270 - 180 / pi * atan((float)(pointeur.y - sourisy) / (float)(pointeur.x - sourisx)));}
+                    else angle = 0;
                 }
                 //déplacer le pointeur quand on appuye sur le pavé directionnel
                 if (IsKeyDown(265) && ((int)pointeur.y == (int)(y * 0.1) || (int)(pointeur.y - 1) == (int)(y * 0.1))) pointeur.y = y;
                 else if (IsKeyDown(265))pointeur.y -= 2;
-
                 if (IsKeyDown(262) && pointeur.x == x)pointeur.x = 0;
                 else if (IsKeyDown(262))pointeur.x += 2;
-
                 if (IsKeyDown(263) && pointeur.x == 0)pointeur.x = x;
                 else if (IsKeyDown(263))pointeur.x -= 2;
-
-                if (IsKeyDown(264) && ((int)pointeur.y == y || (int)(pointeur.y + 1 == y))) {
-                    pointeur.y = y * 0.1;
-                }
+                if (IsKeyDown(264) && ((int)pointeur.y == y || (int)(pointeur.y + 1 == y))) {pointeur.y = y * 0.1;}
                 else if (IsKeyDown(264))pointeur.y += 2;
-
-                if (IsKeyDown(KEY_P)) {
-                    EndDrawing();
-                    res = 2;
-                }
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
                 DrawPolyLines(pointeur, 3, 20, angle, WHITE);
-
-                j.collisionCurseur(pointeur.x,pointeur.y, angle);
+                
+                // ----------- Avancment du jeu -----------
 
                 j.avancement(pointeur.x,pointeur.y, angle);
-                j.renduAsteroids();
+
+                // Pause
+                if (IsKeyDown(KEY_P)) {
+                    EndDrawing();
+                    res = 2;
+                }
+
+
 
                 /*
                 -------------------------------------------------------------------------Ecran de Pause --------------------------------------------------------------------------------------------------

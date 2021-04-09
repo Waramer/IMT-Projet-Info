@@ -10,10 +10,11 @@ public:
 	Tir(double x, double y, double angle);
 	void move();
 	void rendu();
-	Point getPoint();
+	double getX();
+	double getY();
 
 private:
-	Point point;
+	double position[2];
 	double direction[2];
 };
 #endif

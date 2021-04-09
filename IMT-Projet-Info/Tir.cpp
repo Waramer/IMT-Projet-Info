@@ -4,23 +4,29 @@
 
 Tir::Tir(double x, double y, double angle)
 {
-	point = Point(x, y);
+	position[0] = x;
+	position[1] = y;
 	direction[0] = sin(-angle * 3.14159 / 180);
 	direction[1] = cos(-angle * 3.14159 / 180);
 }
 
 void Tir::move()
 {
-	point.set_x(point.get_x() + direction[0]);
-	point.set_y(point.get_y() + direction[1]);
+	position[0] += 7*direction[0];
+	position[1] += 7*direction[1];
 }
 
 void Tir::rendu()
 {
-	DrawCircle(point.get_x(), point.get_y(),2,WHITE);
+	DrawCircle(position[0], position[1],2,WHITE);
 }
 
-Point Tir::getPoint()
+double Tir::getX()
 {
-	return point;
+	return position[0];
+}
+
+double Tir::getY()
+{
+	return position[1];
 }
