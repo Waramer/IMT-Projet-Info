@@ -184,7 +184,7 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran de Jeu --------------------------------------------------------------------------------------------------            
             */        
 
-            Jeu j;
+            Jeu j(difficultyLevel);
 
             while (res == 1) {
 
@@ -224,23 +224,19 @@ Ecran::Ecran()
                 }
                 //déplacer le pointeur quand on appuye sur le pavé directionnel
                 if (IsKeyDown(265) && ((int)pointeur.y == (int)(y * 0.1) || (int)(pointeur.y - 1) == (int)(y * 0.1))) pointeur.y = y;
-                else if (IsKeyDown(265))pointeur.y -= 2;
+                else if (IsKeyDown(265))pointeur.y -= 3;
 
                 if (IsKeyDown(262) && pointeur.x == x)pointeur.x = 0;
-                else if (IsKeyDown(262))pointeur.x += 2;
+                else if (IsKeyDown(262))pointeur.x += 3;
 
                 if (IsKeyDown(263) && pointeur.x == 0)pointeur.x = x;
-                else if (IsKeyDown(263))pointeur.x -= 2;
+                else if (IsKeyDown(263))pointeur.x -= 3;
 
                 if (IsKeyDown(264) && ((int)pointeur.y == y || (int)(pointeur.y + 1 == y))) {
                     pointeur.y = y * 0.1;
                 }
-                else if (IsKeyDown(264))pointeur.y += 2;
+                else if (IsKeyDown(264))pointeur.y += 3;
 
-                if (IsKeyDown(KEY_P)) {
-                    EndDrawing();
-                    res = 2;
-                }
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
@@ -253,7 +249,10 @@ Ecran::Ecran()
                     PlaySoundMulti(sound5);
                 }
 
-
+                if (IsKeyDown(KEY_P)) {
+                    EndDrawing();
+                    res = 2;
+                }
 
                 /*
                 -------------------------------------------------------------------------Ecran de Pause --------------------------------------------------------------------------------------------------

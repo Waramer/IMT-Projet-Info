@@ -8,7 +8,12 @@ Jeu::Jeu(int difficult)
 	j_difficulte = difficult;
 	j_etat = true;
 	j_timer = 0;
+	j_tirColldown = 0;
 	j_nbAsteroids = 10;
+	j_asteroids.push_back(Asteroid(10, 50));
+	j_asteroids.push_back(Asteroid(10, 50));
+	j_asteroids.push_back(Asteroid(10, 50));
+	j_asteroids.push_back(Asteroid(10, 50));
 	j_asteroids.push_back(Asteroid(10, 50));
 	j_curseur.push_back(Point(500, 490));
 	j_curseur.push_back(Point(510, 500));
@@ -22,17 +27,14 @@ void Jeu::nextFrame() {
 void Jeu::avancement(int curs_x, int curs_y, double angle)
 {
 	avancementTirs(curs_x, curs_y, angle);
-	avancementCurseur(curs_x, curs_y, angle);
 	avancementAsteroid();
 	collisionCurseur(curs_x, curs_y, angle);
 	tirsAuBut();
 	j_timer += 1;
+	if (j_tirColldown < 20 * (j_difficulte+1)) {
+		j_tirColldown += 1;
+	}
 	if (j_timer == 1000) { j_timer = 0; }
-}
-
-// avancement du curseur
-void Jeu::avancementCurseur(int curs_x, int curs_y, double angle) {
-
 }
 
 // avancement des tirs
@@ -48,15 +50,17 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 		}
 	}
 	// ajout de tir
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_timer%(j_difficulte+1*10) >= 10) {
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_tirColldown==20*(j_difficulte+1)) {
 		j_tirs.push_back(Tir(curs_x, curs_y, angle));
+		j_tirColldown = 0;
 	}
 }
 
 // avancement des asteroids
 void Jeu::avancementAsteroid() {
 	// ajout asteroid
-	if (j_timer % 100 == 0) {
+	if (j_timer % (int)(100/(1+pow(j_difficulte,2))) == 0) {
+		j_asteroids.push_back(Asteroid(10, 50));
 		j_asteroids.push_back(Asteroid(10, 50));
 	}
 	for (int i = j_asteroids.size() - 1; i >= 0; i--) {
@@ -149,7 +153,7 @@ void Jeu::tirsAuBut() {
 			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX()-j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
-				DrawText("Good Shot !", GetScreenWidth() * 0.05, GetScreenHeight() * 0.25, 50, WHITE);
+				j_asteroids.push_back(Asteroid(10, 50));
 				break;
 			}
 		}
