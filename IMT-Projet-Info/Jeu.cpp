@@ -2,9 +2,10 @@
 #include "raylib.h"
 #include <iostream>
 using namespace std;
-Jeu::Jeu()
+Jeu::Jeu(int difficult)
 {
 	srand((unsigned)time(0));
+	j_difficulte = difficult;
 	j_etat = true;
 	j_timer = 0;
 	j_nbAsteroids = 10;
@@ -25,6 +26,8 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 	avancementAsteroid();
 	collisionCurseur(curs_x, curs_y, angle);
 	tirsAuBut();
+	j_timer += 1;
+	if (j_timer == 1000) { j_timer = 0; }
 }
 
 // avancement du curseur
@@ -45,16 +48,15 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 		}
 	}
 	// ajout de tir
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_timer%(j_difficulte+1*10) >= 10) {
 		j_tirs.push_back(Tir(curs_x, curs_y, angle));
 	}
-	DrawText(TextFormat("Nb Tirs : %i", j_tirs.size()), GetScreenWidth() * 0.06, GetScreenHeight() * 0.06, 30, WHITE);
 }
 
 // avancement des asteroids
 void Jeu::avancementAsteroid() {
 	// ajout asteroid
-	if (j_asteroids.size() < j_nbAsteroids) {
+	if (j_timer % 100 == 0) {
 		j_asteroids.push_back(Asteroid(10, 50));
 	}
 	for (int i = j_asteroids.size() - 1; i >= 0; i--) {
@@ -65,7 +67,7 @@ void Jeu::avancementAsteroid() {
 			j_asteroids.erase(j_asteroids.begin() + i);
 		}
 	}
-	DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.02, 30, WHITE);
+	DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.06, 30, WHITE);
 	for (int i = 0; i < j_asteroids.size(); i++) {
 		j_asteroids[i].renduAsteroid();
 

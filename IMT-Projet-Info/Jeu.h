@@ -9,7 +9,7 @@
 class Jeu
 {
 public:
-	Jeu();
+	Jeu(int difficult);
 	void nextFrame();
 	void avancement(int curs_x, int curs_y, double angle);
 	void avancementCurseur(int curs_x, int curs_y, double angle);
@@ -28,6 +28,7 @@ private:
 	int j_timer;
 	int j_nbAsteroids;
 	bool j_etat;
+	int j_difficulte;
 
 };
 #endif
