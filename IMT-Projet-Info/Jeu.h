@@ -15,7 +15,6 @@ public:
 	void avancementCurseur(int curs_x, int curs_y, double angle);
 	void avancementTirs(int curs_x, int curs_y, double angle);
 	void avancementAsteroid();
-	void renduAsteroids();
 	bool collisionCurseur(int curs_x, int curs_y, double angle);
 	bool pointDansCurseur(Point point);
 

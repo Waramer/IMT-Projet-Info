@@ -246,8 +246,7 @@ Ecran::Ecran()
                 int a, b, c, d;
                 DrawPolyLines(pointeur, 3, 20, angle, WHITE);
 
-                j.avancement();
-                j.renduAsteroids();
+                j.avancement(pointeur.x,pointeur.y,angle);
 
                 if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
                     StopSoundMulti();
