@@ -5,6 +5,11 @@
 
 using namespace std;
 
+Point::Point() {
+	p_x = 0;
+	p_y = 0;
+}
+
 Point::Point(int rayon)
 {
 	int diametre = 2 * rayon + 1;

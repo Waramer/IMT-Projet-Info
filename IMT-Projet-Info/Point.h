@@ -11,6 +11,7 @@ private:
 	int p_y;
 
 public:
+	Point();
 	Point(int rayon);
 	Point(int x, int y);
 	int get_x();
