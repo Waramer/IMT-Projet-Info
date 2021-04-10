@@ -24,7 +24,7 @@ Jeu::Jeu(int difficult, Joueur j)
 	j_curseur.push_back(Point(510, 500));
 	j_curseur.push_back(Point(490, 500));
 	
-	Joueur j_joueur = j;
+	Joueur j_joueur;
 	
 }
 
@@ -43,7 +43,26 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 		j_tirColldown += 1;
 	}
 	if (j_timer == 1000) { j_timer = 0; }
+	// Augmentation du score
+	if (j_timer % 40*(j_difficulte+1) == 0 && j_timer !=0) {
+		switch (j_difficulte){
+		case 0:
+			j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 100);
+			break;
+		
+		case 1:
+			j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 100);
+			break;
+		case 2:
+			j_joueur.setScoreHard(j_joueur.getScoreHard() + 100);
+			break;
+		default:
+			break;
+		}
+	}	
 }
+
+
 
 // avancement des tirs
 void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
@@ -163,17 +182,17 @@ void Jeu::tirsAuBut() {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
 				j_asteroids.push_back(Asteroid(10, 50));
-				PlaySoundMulti(sound3);
+				PlaySoundMulti(sound4);
 				switch (j_difficulte) {
 				case 0:
-					j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 100);
+					j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 25);
 					break;
 
 				case 1:
-					j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 100);
+					j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 25);
 					break;
 				case 2:
-					j_joueur.setScoreHard(j_joueur.getScoreHard() + 100);
+					j_joueur.setScoreHard(j_joueur.getScoreHard() + 25);
 					break;
 				default:
 					break;
