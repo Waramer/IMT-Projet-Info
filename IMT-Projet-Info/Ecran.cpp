@@ -119,8 +119,6 @@ Ecran::Ecran()
         int selectionDifficulty = difficultyLevel;
         int selectionMusic= musicON;
 
-        
-
 
         OptionMenu option5("RESUME GAME", true);
         OptionMenu option6("MAIN SCREEN", false);
@@ -181,7 +179,10 @@ Ecran::Ecran()
                         pointeur.x = x * 0.5;
                         pointeur.y = y * 0.5;
                         StopSoundMulti();
-                        PlaySoundMulti(sound2);
+                        if (musicON != 1) {
+                            PlaySoundMulti(sound2);
+                        }
+                        
                     }
                     else if (selection == 1) {
                         // Ouvrir la page Highscores
@@ -218,7 +219,7 @@ Ecran::Ecran()
 
             while (res == 1) {
 
-                if (GetSoundsPlaying() == 0)
+                if (GetSoundsPlaying() == 0 && musicON != 1)
                     PlaySoundMulti(sound2);
 
                 switch (difficultyLevel) {
@@ -413,6 +414,9 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
+                            StopSoundMulti();
+                            if (GetSoundsPlaying() == 0 && musicON != 1)
+                                PlaySoundMulti(sound2);
                             
                         }
                     
@@ -422,7 +426,10 @@ Ecran::Ecran()
                             pointeur.y = y * 0.5;
                             res = 0;
                             StopSoundMulti();
-                            PlaySoundMulti(sound);
+                            if (musicON != 1) {
+                                PlaySoundMulti(sound);
+                            }
+                            
                         }
                     }
 
@@ -513,18 +520,7 @@ Ecran::Ecran()
                     if (IsKeyPressed(KEY_LEFT) && selectionDisplay > 0) {
                         selectionDisplay--;
                     }
-                    if (selectionDisplay == 0) {
-                        if (IsKeyPressed(KEY_ENTER) && fullScreen == 1) {
-                            ToggleFullscreen();
-                            fullScreen = selectionDisplay;
-                        }
-                    }
-                    else {
-                        if (IsKeyPressed(KEY_ENTER) && fullScreen == 0) {
-                            ToggleFullscreen();
-                            fullScreen = selectionDisplay;
-                        }
-                    }
+                    
                 
                     break;
                 case 1:
@@ -536,9 +532,7 @@ Ecran::Ecran()
                     if (IsKeyPressed(KEY_LEFT) && selectionDifficulty > 0) {
                         selectionDifficulty--;
                     }
-                    if (IsKeyPressed(KEY_ENTER)) {
-                        difficultyLevel = selectionDifficulty;
-                    }
+                    
                     break;
                 case 2:
                     // Music
@@ -549,17 +543,32 @@ Ecran::Ecran()
                     if (IsKeyPressed(KEY_LEFT) && selectionMusic > 0) {
                         selectionMusic--;
                     }
+                    
+                    break;
+                case 3:
                     if (IsKeyPressed(KEY_ENTER)) {
+                        // Application de l'affichage
+                        if (selectionDisplay == 0 && fullScreen == 1) {
+                            ToggleFullscreen();
+                            fullScreen = selectionDisplay;
+                            
+                        }
+                        else if (selectionDisplay == 1 && fullScreen == 0) {
+                                ToggleFullscreen();
+                                fullScreen = selectionDisplay;
+                            
+                        }
+
+                        // Application de la difficulté
+                        difficultyLevel = selectionDifficulty;
+
+                        // Application du réglage de la musique
                         musicON = selectionMusic;
                         if(musicON==1)
                             StopSoundMulti();
                         else if (GetSoundsPlaying()==0)
                             PlaySoundMulti(sound);
 
-                    }
-                    break;
-                case 3:
-                    if (IsKeyPressed(KEY_ENTER)) {
                         selectionDisplay = fullScreen;
                         selectionDifficulty = difficultyLevel;
                         selectionMusic = musicON;
@@ -572,9 +581,7 @@ Ecran::Ecran()
 
                 //position des menus sur l'ecran
                 DrawText(("%c", s1), x / 2 - tailleS1 / 2, 100, 120, WHITE);
-                DrawText("PRESS ENTER TO CONFIRM CHANGES", 3*x/4, y*0.8, 20, WHITE);
-               
-
+                
                 DrawText(optionsSettings[0].getString(), x/2 - screenOptionsSizes[selectionDisplay]/2, y * 0.35, 40, tabColorsSettings[0]);
                 DrawText(optionsSettings[1].getString(), x / 2 -difficultyOptionsSizes[selectionDifficulty] / 2, y * 0.35 + y * 0.1 * 1, 40, tabColorsSettings[1]);
                 DrawText(optionsSettings[2].getString(), x / 2 - musicOptionsSizes[selectionMusic] / 2, y * 0.35 + y * 0.1 * 2, 40, tabColorsSettings[2]);
@@ -619,12 +626,16 @@ Ecran::Ecran()
                         pointeur.x = x * 0.5;
                         pointeur.y = y * 0.5;
                         StopSoundMulti();
-                        PlaySoundMulti(sound2);
+                        if (GetSoundsPlaying() == 0 && musicON != 1)
+                            PlaySoundMulti(sound2);
                     }
                     else {
                         res = 0;
                         StopSoundMulti();
-                        PlaySoundMulti(sound);
+                        if (musicON != 1) {
+                            PlaySoundMulti(sound);
+                        }
+                        
                     }
                 }
 
