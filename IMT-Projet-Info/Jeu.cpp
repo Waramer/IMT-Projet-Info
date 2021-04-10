@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include <iostream>
 using namespace std;
-Jeu::Jeu(int difficult)
+Jeu::Jeu(int difficult, Joueur j)
 {
 	srand((unsigned)time(0));
 	j_difficulte = difficult;
@@ -18,6 +18,9 @@ Jeu::Jeu(int difficult)
 	j_curseur.push_back(Point(500, 490));
 	j_curseur.push_back(Point(510, 500));
 	j_curseur.push_back(Point(490, 500));
+	
+	Joueur j_joueur = j;
+	
 }
 
 void Jeu::nextFrame() {
@@ -154,6 +157,7 @@ void Jeu::tirsAuBut() {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
 				j_asteroids.push_back(Asteroid(10, 50));
+				j_joueur.setScore(j_joueur.getScore() + 100);
 				break;
 			}
 		}

@@ -8,6 +8,7 @@
 #include <cmath>
 #include "optionMenu.h"
 #include "Jeu.h"
+#include "Joueur.h"
 
 using namespace std;
 
@@ -26,7 +27,10 @@ Ecran::Ecran()
         int selection2 = 0;
         int selectionGameOver = 0;
 
+
+        Joueur joueur;
         int score = 0;
+        
 
 
         //initialisation de la fenêtre
@@ -80,19 +84,19 @@ Ecran::Ecran()
 
         // Tableau des scores trié
 
-        int scoresTab[15] = {5500, 4256, 4214, 4053, 3501, 2798, 2435, 1789, 1456, 1234,880,756,526,128,42};
-        int highscore = scoresTab[0];
-        char* scoresTabChar[15];
+        int scoresTab[15] = {};
+        //int highscore = scoresTab[0];
+        //char* scoresTabChar[15];
 
         // Menu Game Over
 
         const char* s4 = "GAME OVER";
         int tailleS4 = MeasureText(s4, 200);
 
-        const char* s5 = "YOUR SCORE : 0";
+        const char* s5 = "YOUR SCORE : " + score;
         int tailleS5 = MeasureText(s5, 75);
 
-        const char* s6 = "HIGHSCORE : 5500";
+        const char* s6 = "HIGHSCORE : " + joueur.getBestScore();
         int tailleS6 = MeasureText(s5, 75);
 
 
@@ -206,19 +210,20 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran de Jeu --------------------------------------------------------------------------------------------------            
             */        
 
-            Jeu j(difficultyLevel);
+            Jeu j(difficultyLevel, joueur);
 
             while (res == 1) {
 
-
-                //affiachage du haut de l'ecran
+                score = j.j_joueur.getScore();
+                //affichage du haut de l'ecran
                 EnableCursor();
                 BeginDrawing();
                 ClearBackground(BLACK);
                 int test = MeasureText("ASTEROID", 50);
-                DrawText("ASTEROID", GetScreenWidth() * 0.5 - (test * 0.5), GetScreenHeight() * 0.05, 50, WHITE);
-                DrawText("Press P for pause", GetScreenWidth() * 0.85 - (test * 0.5), GetScreenHeight() * 0.05, 30, WHITE);
-                DrawLine(0, GetScreenHeight() * 0.1, GetScreenWidth(), GetScreenHeight() * 0.1, WHITE);
+                DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.05, 50, WHITE);
+                //DrawText("Press P for pause", x * 0.85 - (test * 0.5), y * 0.05, 30, WHITE);
+                DrawText(TextFormat("Score : %d", score), x * 0.85 - (test * 0.5), y * 0.05, 30, WHITE);
+                DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
 
                 float angle = GetGestureDragAngle();
                 double pi = 3.1415;
@@ -268,15 +273,37 @@ Ecran::Ecran()
                 j.avancement(pointeur.x,pointeur.y,angle);
 
                 if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
-                    res = 5;
+                    
+                    int tmp = 0;
+                    int newScoresTab[15] = {};
+                    for (int i = 0; i < 15;i++) {
+                        if (score >= scoresTab[i] && tmp == 0) {
+                            newScoresTab[i] = score;
+                            tmp += 1;
+                            for (int k = i; k < 14;k++) {
+                                newScoresTab[k + 1] = scoresTab[k];
+                            }
+                        }
+                        else if (score < scoresTab[i]) {
+                            newScoresTab[i] = scoresTab[i];
+                        }
+                    }
+                    for (int i = 0; i < 15;i++) {
+                        scoresTab[i] = newScoresTab[i];
+                    }
+                    joueur.setBestScore(scoresTab[0]);
+                    
                     StopSoundMulti();
                     PlaySoundMulti(sound5);
+                    res = 5;
                 }
 
                 if (IsKeyDown(KEY_P)) {
                     EndDrawing();
                     res = 2;
                 }
+
+               
 
                 /*
                 -------------------------------------------------------------------------Ecran de Pause --------------------------------------------------------------------------------------------------
@@ -520,8 +547,8 @@ Ecran::Ecran()
                 }
 
                 DrawText(("%c", s4), x / 2 - tailleS4 / 2, 100, 200, RED);
-                DrawText(("%c", s5), x / 2 - tailleS5 / 2, 350, 75, GRAY); 
-                DrawText(("%c", s6), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                DrawText(TextFormat("Score : %d", score), x / 2 - tailleS5 / 2, 350, 75, GRAY); 
+                DrawText(TextFormat("Highscore: %d", scoresTab[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
                 for (int i = 0;i < 2;i++) {
                     DrawText(optionsGameOver[i].getString(), optionsGameOver[i].getPosition(x), y * 0.6+y*i*0.1, 40, tabColorsGameOver[i]);
                 }

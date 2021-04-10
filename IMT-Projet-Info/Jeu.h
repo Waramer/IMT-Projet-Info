@@ -5,17 +5,20 @@
 #include "Asteroid.h"
 #include "Point.h"
 #include "Tir.h"
+#include "Joueur.h"
 
 class Jeu
 {
 public:
-	Jeu(int difficult);
+	Jeu(int difficult, Joueur j);
 	void nextFrame();
 	void avancement(int curs_x, int curs_y, double angle);
 	void avancementTirs(int curs_x, int curs_y, double angle);
 	void avancementAsteroid();
 	bool collisionCurseur(int curs_x, int curs_y, double angle);
 	bool pointDansCurseur(Point point);
+	Joueur j_joueur;
+	
 
 	void tirsAuBut();
 
@@ -28,6 +31,7 @@ private:
 	bool j_etat;
 	int j_difficulte;
 	int j_tirColldown;
+
 
 };
 #endif
