@@ -181,7 +181,10 @@ Ecran::Ecran()
                         pointeur.x = x * 0.5;
                         pointeur.y = y * 0.5;
                         StopSoundMulti();
-                        PlaySoundMulti(sound2);
+                        if (musicON != 1) {
+                            PlaySoundMulti(sound2);
+                        }
+                        
                     }
                     else if (selection == 1) {
                         // Ouvrir la page Highscores
@@ -412,6 +415,7 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
+
                             
                         }
                     
@@ -421,7 +425,10 @@ Ecran::Ecran()
                             pointeur.y = y * 0.5;
                             res = 0;
                             StopSoundMulti();
-                            PlaySoundMulti(sound);
+                            if (musicON != 1) {
+                                PlaySoundMulti(sound);
+                            }
+                            
                         }
                     }
 
@@ -623,7 +630,10 @@ Ecran::Ecran()
                     else {
                         res = 0;
                         StopSoundMulti();
-                        PlaySoundMulti(sound);
+                        if (musicON != 1) {
+                            PlaySoundMulti(sound);
+                        }
+                        
                     }
                 }
 
