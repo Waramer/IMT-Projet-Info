@@ -183,7 +183,10 @@ Ecran::Ecran()
                         pointeur.x = x * 0.5;
                         pointeur.y = y * 0.5;
                         StopSoundMulti();
-                        PlaySoundMulti(sound2);
+                        if (musicON != 1) {
+                            PlaySoundMulti(sound2);
+                        }
+                        
                     }
                     else if (selection == 1) {
                         // Ouvrir la page Highscores
@@ -411,6 +414,7 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
+
                             
                         }
                     
@@ -420,7 +424,10 @@ Ecran::Ecran()
                             pointeur.y = y * 0.5;
                             res = 0;
                             StopSoundMulti();
-                            PlaySoundMulti(sound);
+                            if (musicON != 1) {
+                                PlaySoundMulti(sound);
+                            }
+                            
                         }
                     }
 
@@ -555,9 +562,9 @@ Ecran::Ecran()
 
                         // Application du réglage de la musique
                         musicON = selectionMusic;
-                        if (musicON % 2 == 1)
+                        if (musicON  == 1)
                             StopSoundMulti();
-                        else
+                        else if(GetSoundsPlaying() == 0)
                             PlaySoundMulti(sound);
 
                         selectionDisplay = fullScreen;
@@ -622,7 +629,10 @@ Ecran::Ecran()
                     else {
                         res = 0;
                         StopSoundMulti();
-                        PlaySoundMulti(sound);
+                        if (musicON != 1) {
+                            PlaySoundMulti(sound);
+                        }
+                        
                     }
                 }
 
