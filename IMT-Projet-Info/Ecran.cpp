@@ -68,7 +68,7 @@ Ecran::Ecran()
 
         //options de l'écran de réglages
         OptionMenu optionSettings1("FULL SCREEN : ", true);
-        int screenOptionsSizes[2] = { MeasureText("FULL SCREEN : ON", 40), MeasureText("FULL SCREEN : OFF", 40) };
+        int screenOptionsSizes[2] = { MeasureText("FULL SCREEN : OFF", 40), MeasureText("FULL SCREEN : ON", 40) };
         OptionMenu optionSettings2("DIFFICULTY : ", false);
         int difficultyOptionsSizes[3] = { MeasureText("DIFFICULTY : EASY", 40), MeasureText("DIFFICULTY : MEDIUM", 40), MeasureText("DIFFICULTY : HARD", 40) };
         OptionMenu optionSettings3("MUSIC : ", false);
