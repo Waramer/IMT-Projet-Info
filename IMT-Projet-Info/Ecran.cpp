@@ -68,8 +68,11 @@ Ecran::Ecran()
 
         //options de l'écran de réglages
         OptionMenu optionSettings1("FULL SCREEN : ", true);
+        int screenOptionsSizes[2] = { MeasureText("FULL SCREEN : ON", 40), MeasureText("FULL SCREEN : OFF", 40) };
         OptionMenu optionSettings2("DIFFICULTY : ", false);
+        int difficultyOptionsSizes[3] = { MeasureText("DIFFICULTY : EASY", 40), MeasureText("DIFFICULTY : MEDIUM", 40), MeasureText("DIFFICULTY : HARD", 40) };
         OptionMenu optionSettings3("MUSIC : ", false);
+        int musicOptionsSizes[2] = { MeasureText("MUSIC : ON", 40), MeasureText("MUSIC : OFF", 40) };
         OptionMenu optionSettings4("MAIN SCREEN", false);
         OptionMenu optionsSettings[4] = { optionSettings1, optionSettings2, optionSettings3, optionSettings4 };
         Color tabColorsSettings[4] = { optionsSettings[0].getColor(),optionsSettings[1].getColor() ,optionsSettings[2].getColor(),optionsSettings[3].getColor() };
@@ -119,11 +122,10 @@ Ecran::Ecran()
         
 
 
-        OptionMenu option5("RESUME", true);
-        OptionMenu option6("SETTINGS", false);
-        OptionMenu option7("MAIN SCREEN", false);
-        OptionMenu pause[3] = {option5, option6, option7};
-        Color pausecolors[3] = { pause[0].getColor(), pause[1].getColor(), pause[2].getColor()};
+        OptionMenu option5("RESUME GAME", true);
+        OptionMenu option6("MAIN SCREEN", false);
+        OptionMenu pause[2] = {option5, option6};
+        Color pausecolors[2] = { pause[0].getColor(), pause[1].getColor()};
 
         //initialisation des sons musique
         InitAudioDevice();
@@ -236,10 +238,10 @@ Ecran::Ecran()
                 EnableCursor();
                 BeginDrawing();
                 ClearBackground(BLACK);
-                int test = MeasureText("ASTEROID", 50);
-                DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.05, 50, WHITE);
-                //DrawText("Press P for pause", x * 0.85 - (test * 0.5), y * 0.05, 30, WHITE);
-                DrawText(TextFormat("Score : %d", score), x * 0.85 - (test * 0.5), y * 0.05, 30, WHITE);
+                int test = MeasureText("ASTEROID", 75);
+                DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.015, 75, WHITE);
+                DrawText("PRESS P FOR PAUSE", x * 0.85 - (test * 0.5), y * 0.03, 40, WHITE);
+                DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.03, 40, WHITE);
                 DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
 
                 float angle = GetGestureDragAngle();
@@ -372,7 +374,15 @@ Ecran::Ecran()
 
                 while (res == 2) {
 
+                    ClearBackground(BLACK);
                     BeginDrawing();
+                    int test = MeasureText("ASTEROID", 75);
+                    int test2 = MeasureText("GAME PAUSED", 100);
+                    DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.015, 75, WHITE);
+                    DrawText("GAME PAUSED", x * 0.5 - (test2 * 0.5), y * 0.3, 100, WHITE);
+                    DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.03, 40, WHITE);
+                    DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
+                    
 
                     //déplacement entre les différents menus avec les touches up et down
                     if (IsKeyPressed(KEY_DOWN) && selection2 < 2) {
@@ -401,13 +411,10 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
-                            pointeur.x = x * 0.5;
-                            pointeur.y = y * 0.5;
+                            
                         }
+                    
                         else if (selection2 == 1) {
-                            // Ouvrir la page Settings
-                        }
-                        else if (selection2 == 2) {
                             // Ouvrir le menu
                             pointeur.x = x * 0.5;
                             pointeur.y = y * 0.5;
@@ -418,9 +425,8 @@ Ecran::Ecran()
                     }
 
                     //position des menus sur l'ecran
-                    DrawText(option5.getString(), option5.getPosition(x), y * 0.35, 40, pausecolors[0]);
-                    DrawText(option6.getString(), option6.getPosition(x), y * 0.35 + y * 0.1, 40, pausecolors[1]);
-                    DrawText(option7.getString(), option7.getPosition(x), y * 0.35 + y * 0.2, 40, pausecolors[2]);
+                    DrawText(option5.getString(), option5.getPosition(x), y * 0.5, 40, pausecolors[0]);
+                    DrawText(option6.getString(), option6.getPosition(x), y * 0.5 + y * 0.1, 40, pausecolors[1]);
                     EndDrawing();
 
                 }
@@ -564,22 +570,29 @@ Ecran::Ecran()
 
                 //position des menus sur l'ecran
                 DrawText(("%c", s1), x / 2 - tailleS1 / 2, 100, 120, WHITE);
+                DrawText("PRESS ENTER TO CONFIRM CHANGES", 3*x/4, y*0.8, 20, WHITE);
                
 
-                for (int i = 0; i < 4;i++) {
-                    DrawText(optionsSettings[i].getString(), optionsSettings[i].getPosition(x), y * 0.35 + y*0.1*i, 40, tabColorsSettings[i]);
-                }
+                DrawText(optionsSettings[0].getString(), x/2 - screenOptionsSizes[selectionDisplay]/2, y * 0.35, 40, tabColorsSettings[0]);
+                DrawText(optionsSettings[1].getString(), x / 2 -difficultyOptionsSizes[selectionDifficulty] / 2, y * 0.35 + y * 0.1 * 1, 40, tabColorsSettings[1]);
+                DrawText(optionsSettings[2].getString(), x / 2 - musicOptionsSizes[selectionMusic] / 2, y * 0.35 + y * 0.1 * 2, 40, tabColorsSettings[2]);
+                DrawText(optionsSettings[3].getString(), optionsSettings[3].getPosition(x), y * 0.35 + y * 0.1 * 3, 40, tabColorsSettings[3]);
 
-                DrawText(displayTab[selectionDisplay], optionSettings1.getPosition(x) + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
-                DrawText(difficultyTab[selectionDifficulty], optionSettings2.getPosition(x) +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
-                DrawText(musicTab[selectionMusic], optionSettings3.getPosition(x) +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
+                DrawText(displayTab[selectionDisplay], x / 2 - screenOptionsSizes[selectionDisplay] / 2 + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
+                DrawText(difficultyTab[selectionDifficulty], x/2 - difficultyOptionsSizes[selectionDifficulty] / 2 +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
+                DrawText(musicTab[selectionMusic], x / 2 - musicOptionsSizes[selectionMusic] / 2 +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
                 EndDrawing();
 
             }
+
+            /*
+                ------------------------------------------------------------------------- Ecran de Game Over ------------------------------------------------------------------------------------------------
+            */
+
             while (res == 5) {
                 BeginDrawing();
                 ClearBackground(BLACK);
-                if (IsKeyPressed(KEY_DOWN) && selectionGameOver < 2) {
+                if (IsKeyPressed(KEY_DOWN) && selectionGameOver < 1) {
                     tabColorsGameOver[selectionGameOver] = WHITE;
                     optionsGameOver[selectionGameOver].setSelection(false);
 

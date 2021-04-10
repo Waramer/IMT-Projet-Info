@@ -74,7 +74,7 @@ void Jeu::avancementAsteroid() {
 			j_asteroids.erase(j_asteroids.begin() + i);
 		}
 	}
-	DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.06, 30, WHITE);
+	//DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.06, 30, WHITE);
 	for (int i = 0; i < j_asteroids.size(); i++) {
 		j_asteroids[i].renduAsteroid();
 
