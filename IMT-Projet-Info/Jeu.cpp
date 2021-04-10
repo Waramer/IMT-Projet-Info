@@ -1,7 +1,12 @@
 #include "Jeu.h"
 #include "raylib.h"
+#include "Ecran.h"
 #include <iostream>
 using namespace std;
+
+Sound sound4 = LoadSound("explosion.wav");
+Sound sound3 = LoadSound("tir.wav");
+
 Jeu::Jeu(int difficult, Joueur j)
 {
 	srand((unsigned)time(0));
@@ -56,6 +61,7 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_tirColldown==20*(j_difficulte+1)) {
 		j_tirs.push_back(Tir(curs_x, curs_y, angle));
 		j_tirColldown = 0;
+		PlaySoundMulti(sound3);
 	}
 }
 
@@ -158,6 +164,7 @@ void Jeu::tirsAuBut() {
 				j_tirs.erase(j_tirs.begin() + tir);
 				j_asteroids.push_back(Asteroid(10, 50));
 				j_joueur.setScore(j_joueur.getScore() + 100);
+				PlaySoundMulti(sound4);
 				break;
 			}
 		}

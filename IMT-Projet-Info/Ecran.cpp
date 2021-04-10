@@ -123,7 +123,7 @@ Ecran::Ecran()
         OptionMenu pause[3] = {option5, option6, option7};
         Color pausecolors[3] = { pause[0].getColor(), pause[1].getColor(), pause[2].getColor()};
 
-        //initialisation des sons musique
+        //initialisation des sons et musiques
         InitAudioDevice();
         Sound sound = LoadSound("audio_menu.wav");
         Sound sound2 = LoadSound("audio_jeu.mp3");
@@ -132,9 +132,6 @@ Ecran::Ecran()
         Sound sound5 = LoadSound("game_over.mp3");
 
 
-        //PlaySoundMulti(sound3);
-        //PlaySoundMulti(sound4);
-        //PlaySoundMulti(sound5);
 
 
         PlaySoundMulti(sound);
@@ -273,7 +270,6 @@ Ecran::Ecran()
                 j.avancement(pointeur.x,pointeur.y,angle);
 
                 if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
-                    
                     int tmp = 0;
                     int newScoresTab[15] = {};
                     for (int i = 0; i < 15;i++) {
@@ -476,9 +472,9 @@ Ecran::Ecran()
                     }
                     if (IsKeyPressed(KEY_ENTER)) {
                         musicON = selectionMusic;
-                        if(musicON%2==1)
+                        if(musicON==1)
                             StopSoundMulti();
-                        else
+                        else if (GetSoundsPlaying()==0)
                             PlaySoundMulti(sound);
 
                     }
