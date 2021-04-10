@@ -119,8 +119,6 @@ Ecran::Ecran()
         int selectionDifficulty = difficultyLevel;
         int selectionMusic= musicON;
 
-        
-
 
         OptionMenu option5("RESUME GAME", true);
         OptionMenu option6("MAIN SCREEN", false);
@@ -220,7 +218,7 @@ Ecran::Ecran()
 
             while (res == 1) {
 
-                if (GetSoundsPlaying() == 0)
+                if (GetSoundsPlaying() == 0 && musicON != 1)
                     PlaySoundMulti(sound2);
 
                 switch (difficultyLevel) {
@@ -415,7 +413,9 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
-
+                            StopSoundMulti();
+                            if (GetSoundsPlaying() == 0 && musicON != 1)
+                                PlaySoundMulti(sound2);
                             
                         }
                     
@@ -625,7 +625,8 @@ Ecran::Ecran()
                         pointeur.x = x * 0.5;
                         pointeur.y = y * 0.5;
                         StopSoundMulti();
-                        PlaySoundMulti(sound2);
+                        if (GetSoundsPlaying() == 0 && musicON != 1)
+                            PlaySoundMulti(sound2);
                     }
                     else {
                         res = 0;
