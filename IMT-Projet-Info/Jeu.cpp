@@ -163,6 +163,7 @@ void Jeu::tirsAuBut() {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
 				j_asteroids.push_back(Asteroid(10, 50));
+				PlaySoundMulti(sound3);
 				switch (j_difficulte) {
 				case 0:
 					j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 100);

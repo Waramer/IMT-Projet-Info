@@ -147,7 +147,8 @@ Ecran::Ecran()
                 -------------------------------------------------------------------------Ecran d'accueil --------------------------------------------------------------------------------------------------
             */
             while (res == 0) {
-
+                if (GetSoundsPlaying() == 0 && musicON!=1)
+                    PlaySoundMulti(sound);
                 BeginDrawing();
                 ClearBackground(color);
 
@@ -215,6 +216,9 @@ Ecran::Ecran()
             int score = 0;
 
             while (res == 1) {
+
+                if (GetSoundsPlaying() == 0)
+                    PlaySoundMulti(sound2);
 
                 switch (difficultyLevel) {
                 case 0:
