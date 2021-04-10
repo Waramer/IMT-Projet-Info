@@ -29,7 +29,7 @@ Ecran::Ecran()
 
 
         Joueur joueur;
-        int score = 0;
+        
         
 
 
@@ -68,8 +68,11 @@ Ecran::Ecran()
 
         //options de l'écran de réglages
         OptionMenu optionSettings1("FULL SCREEN : ", true);
+        int screenOptionsSizes[2] = { MeasureText("FULL SCREEN : OFF", 40), MeasureText("FULL SCREEN : ON", 40) };
         OptionMenu optionSettings2("DIFFICULTY : ", false);
+        int difficultyOptionsSizes[3] = { MeasureText("DIFFICULTY : EASY", 40), MeasureText("DIFFICULTY : MEDIUM", 40), MeasureText("DIFFICULTY : HARD", 40) };
         OptionMenu optionSettings3("MUSIC : ", false);
+        int musicOptionsSizes[2] = { MeasureText("MUSIC : ON", 40), MeasureText("MUSIC : OFF", 40) };
         OptionMenu optionSettings4("MAIN SCREEN", false);
         OptionMenu optionsSettings[4] = { optionSettings1, optionSettings2, optionSettings3, optionSettings4 };
         Color tabColorsSettings[4] = { optionsSettings[0].getColor(),optionsSettings[1].getColor() ,optionsSettings[2].getColor(),optionsSettings[3].getColor() };
@@ -84,7 +87,9 @@ Ecran::Ecran()
 
         // Tableau des scores trié
 
-        int scoresTab[15] = {};
+        int scoresTabEasy[5] = {};
+        int scoresTabMedium[5] = {};
+        int scoresTabHard[5] = {};
         //int highscore = scoresTab[0];
         //char* scoresTabChar[15];
 
@@ -93,10 +98,10 @@ Ecran::Ecran()
         const char* s4 = "GAME OVER";
         int tailleS4 = MeasureText(s4, 200);
 
-        const char* s5 = "YOUR SCORE : " + score;
+        const char* s5 = "YOUR SCORE : ";
         int tailleS5 = MeasureText(s5, 75);
 
-        const char* s6 = "HIGHSCORE : " + joueur.getBestScore();
+        const char* s6 = "HIGHSCORE : ";
         int tailleS6 = MeasureText(s5, 75);
 
 
@@ -107,7 +112,7 @@ Ecran::Ecran()
 
         // choix options
         const char* displayTab[2] = { "OFF","ON" };
-        const char* difficultyTab[3] = { "EASY","NORMAL", "HARD" };
+        const char* difficultyTab[3] = { "EASY","MEDIUM", "HARD" };
         const char* musicTab[2] = { "ON","OFF" };
         int selectionSettings = 0;
         int selectionDisplay = fullScreen;
@@ -117,11 +122,10 @@ Ecran::Ecran()
         
 
 
-        OptionMenu option5("RESUME", true);
-        OptionMenu option6("SETTINGS", false);
-        OptionMenu option7("MAIN SCREEN", false);
-        OptionMenu pause[3] = {option5, option6, option7};
-        Color pausecolors[3] = { pause[0].getColor(), pause[1].getColor(), pause[2].getColor()};
+        OptionMenu option5("RESUME GAME", true);
+        OptionMenu option6("MAIN SCREEN", false);
+        OptionMenu pause[2] = {option5, option6};
+        Color pausecolors[2] = { pause[0].getColor(), pause[1].getColor()};
 
         //initialisation des sons et musiques
         InitAudioDevice();
@@ -208,18 +212,33 @@ Ecran::Ecran()
             */        
 
             Jeu j(difficultyLevel, joueur);
+            int score = 0;
 
             while (res == 1) {
 
-                score = j.j_joueur.getScore();
+                switch (difficultyLevel) {
+                case 0:
+                    score = j.j_joueur.getScoreEasy();
+                    break;
+
+                case 1:
+                    score = j.j_joueur.getScoreMedium();
+                    break;
+                case 2:
+                    score = j.j_joueur.getScoreHard();
+                    break;
+                default:
+                    break;
+                }
+                
                 //affichage du haut de l'ecran
                 EnableCursor();
                 BeginDrawing();
                 ClearBackground(BLACK);
-                int test = MeasureText("ASTEROID", 50);
-                DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.05, 50, WHITE);
-                //DrawText("Press P for pause", x * 0.85 - (test * 0.5), y * 0.05, 30, WHITE);
-                DrawText(TextFormat("Score : %d", score), x * 0.85 - (test * 0.5), y * 0.05, 30, WHITE);
+                int test = MeasureText("ASTEROID", 75);
+                DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.015, 75, WHITE);
+                DrawText("PRESS P FOR PAUSE", x * 0.85 - (test * 0.5), y * 0.03, 40, WHITE);
+                DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.03, 40, WHITE);
                 DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
 
                 float angle = GetGestureDragAngle();
@@ -271,23 +290,68 @@ Ecran::Ecran()
 
                 if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
                     int tmp = 0;
-                    int newScoresTab[15] = {};
-                    for (int i = 0; i < 15;i++) {
-                        if (score >= scoresTab[i] && tmp == 0) {
-                            newScoresTab[i] = score;
-                            tmp += 1;
-                            for (int k = i; k < 14;k++) {
-                                newScoresTab[k + 1] = scoresTab[k];
+                    int newScoresTab[5] = {};
+
+                    switch (difficultyLevel) {
+                    case 0:
+                        for (int i = 0; i < 5;i++) {
+                            if (score >= scoresTabEasy[i] && tmp == 0) {
+                                newScoresTab[i] = score;
+                                tmp += 1;
+                                for (int k = i; k < 4;k++) {
+                                    newScoresTab[k + 1] = scoresTabEasy[k];
+                                }
+                            }
+                            else if (score < scoresTabEasy[i]) {
+                                newScoresTab[i] = scoresTabEasy[i];
                             }
                         }
-                        else if (score < scoresTab[i]) {
-                            newScoresTab[i] = scoresTab[i];
+                        for (int i = 0; i < 5;i++) {
+                            scoresTabEasy[i] = newScoresTab[i];
                         }
+                        
+                        break;
+
+                    case 1:
+                        for (int i = 0; i < 5;i++) {
+                            if (score >= scoresTabMedium[i] && tmp == 0) {
+                                newScoresTab[i] = score;
+                                tmp += 1;
+                                for (int k = i; k < 4;k++) {
+                                    newScoresTab[k + 1] = scoresTabMedium[k];
+                                }
+                            }
+                            else if (score < scoresTabMedium[i]) {
+                                newScoresTab[i] = scoresTabMedium[i];
+                            }
+                        }
+                        for (int i = 0; i < 5;i++) {
+                            scoresTabMedium[i] = newScoresTab[i];
+                        }
+
+                        break;
+                    case 2:
+                        for (int i = 0; i < 5;i++) {
+                            if (score >= scoresTabHard[i] && tmp == 0) {
+                                newScoresTab[i] = score;
+                                tmp += 1;
+                                for (int k = i; k < 4;k++) {
+                                    newScoresTab[k + 1] = scoresTabHard[k];
+                                }
+                            }
+                            else if (score < scoresTabHard[i]) {
+                                newScoresTab[i] = scoresTabHard[i];
+                            }
+                        }
+                        for (int i = 0; i < 5;i++) {
+                            scoresTabHard[i] = newScoresTab[i];
+                        }
+                        break;
+                    default:
+                        break;
                     }
-                    for (int i = 0; i < 15;i++) {
-                        scoresTab[i] = newScoresTab[i];
-                    }
-                    joueur.setBestScore(scoresTab[0]);
+                    
+                    
                     
                     StopSoundMulti();
                     PlaySoundMulti(sound5);
@@ -307,7 +371,15 @@ Ecran::Ecran()
 
                 while (res == 2) {
 
+                    ClearBackground(BLACK);
                     BeginDrawing();
+                    int test = MeasureText("ASTEROID", 75);
+                    int test2 = MeasureText("GAME PAUSED", 100);
+                    DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.015, 75, WHITE);
+                    DrawText("GAME PAUSED", x * 0.5 - (test2 * 0.5), y * 0.3, 100, WHITE);
+                    DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.03, 40, WHITE);
+                    DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
+                    
 
                     //déplacement entre les différents menus avec les touches up et down
                     if (IsKeyPressed(KEY_DOWN) && selection2 < 2) {
@@ -336,13 +408,10 @@ Ecran::Ecran()
                         if (selection2 == 0) {
                             // Lancer le jeu
                             res = 1;
-                            pointeur.x = x * 0.5;
-                            pointeur.y = y * 0.5;
+                            
                         }
+                    
                         else if (selection2 == 1) {
-                            // Ouvrir la page Settings
-                        }
-                        else if (selection2 == 2) {
                             // Ouvrir le menu
                             pointeur.x = x * 0.5;
                             pointeur.y = y * 0.5;
@@ -353,9 +422,8 @@ Ecran::Ecran()
                     }
 
                     //position des menus sur l'ecran
-                    DrawText(option5.getString(), option5.getPosition(x), y * 0.35, 40, pausecolors[0]);
-                    DrawText(option6.getString(), option6.getPosition(x), y * 0.35 + y * 0.1, 40, pausecolors[1]);
-                    DrawText(option7.getString(), option7.getPosition(x), y * 0.35 + y * 0.2, 40, pausecolors[2]);
+                    DrawText(option5.getString(), option5.getPosition(x), y * 0.5, 40, pausecolors[0]);
+                    DrawText(option6.getString(), option6.getPosition(x), y * 0.5 + y * 0.1, 40, pausecolors[1]);
                     EndDrawing();
 
                 }
@@ -377,17 +445,23 @@ Ecran::Ecran()
                 ClearBackground(color);
 
                 DrawText(("%c", s2), x / 2 - tailleS2 / 2, 100, 120, WHITE);
+
+                DrawText("EASY : ", x / 4, 300, 40, WHITE);
                 for (int i = 0; i < 5;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 4, 300+100*i, 40, GRAY);
-                }
-                for (int i = 5; i < 10;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 2, 300 + 100 * (i-5), 40, GRAY);
-                }
-                for (int i = 10; i < 15;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), 3*x / 4, 300 + 100 * (i - 10), 40, GRAY);
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabEasy[i]), x / 4, 400+100*i, 40, GRAY);
                 }
 
-                DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 150, 40, RED);
+                DrawText("MEDIUM : ", x / 2, 300, 40, WHITE);
+                for (int i = 0; i < 5;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabMedium[i]), x / 2, 400 + 100 *i, 40, GRAY);
+                }
+
+                DrawText("HARD : ", 3*x / 4, 300, 40, WHITE);
+                for (int i = 0; i < 5;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabHard[i]), 3*x / 4, 400 + 100 *i, 40, GRAY);
+                }
+
+                DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 100, 40, RED);
                 if (IsKeyPressed(KEY_ENTER)) {
                     res = 0;
                 }
@@ -493,22 +567,29 @@ Ecran::Ecran()
 
                 //position des menus sur l'ecran
                 DrawText(("%c", s1), x / 2 - tailleS1 / 2, 100, 120, WHITE);
+                DrawText("PRESS ENTER TO CONFIRM CHANGES", 3*x/4, y*0.8, 20, WHITE);
                
 
-                for (int i = 0; i < 4;i++) {
-                    DrawText(optionsSettings[i].getString(), optionsSettings[i].getPosition(x), y * 0.35 + y*0.1*i, 40, tabColorsSettings[i]);
-                }
+                DrawText(optionsSettings[0].getString(), x/2 - screenOptionsSizes[selectionDisplay]/2, y * 0.35, 40, tabColorsSettings[0]);
+                DrawText(optionsSettings[1].getString(), x / 2 -difficultyOptionsSizes[selectionDifficulty] / 2, y * 0.35 + y * 0.1 * 1, 40, tabColorsSettings[1]);
+                DrawText(optionsSettings[2].getString(), x / 2 - musicOptionsSizes[selectionMusic] / 2, y * 0.35 + y * 0.1 * 2, 40, tabColorsSettings[2]);
+                DrawText(optionsSettings[3].getString(), optionsSettings[3].getPosition(x), y * 0.35 + y * 0.1 * 3, 40, tabColorsSettings[3]);
 
-                DrawText(displayTab[selectionDisplay], optionSettings1.getPosition(x) + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
-                DrawText(difficultyTab[selectionDifficulty], optionSettings2.getPosition(x) +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
-                DrawText(musicTab[selectionMusic], optionSettings3.getPosition(x) +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
+                DrawText(displayTab[selectionDisplay], x / 2 - screenOptionsSizes[selectionDisplay] / 2 + MeasureText(optionSettings1.getString(),40), y * 0.35, 40, GRAY);
+                DrawText(difficultyTab[selectionDifficulty], x/2 - difficultyOptionsSizes[selectionDifficulty] / 2 +  MeasureText(optionSettings2.getString(), 40), y * 0.35 + y * 0.1, 40, GRAY);
+                DrawText(musicTab[selectionMusic], x / 2 - musicOptionsSizes[selectionMusic] / 2 +  MeasureText(optionSettings3.getString(), 40), y * 0.35 + y * 0.2, 40, GRAY);
                 EndDrawing();
 
             }
+
+            /*
+                ------------------------------------------------------------------------- Ecran de Game Over ------------------------------------------------------------------------------------------------
+            */
+
             while (res == 5) {
                 BeginDrawing();
                 ClearBackground(BLACK);
-                if (IsKeyPressed(KEY_DOWN) && selectionGameOver < 2) {
+                if (IsKeyPressed(KEY_DOWN) && selectionGameOver < 1) {
                     tabColorsGameOver[selectionGameOver] = WHITE;
                     optionsGameOver[selectionGameOver].setSelection(false);
 
@@ -543,8 +624,25 @@ Ecran::Ecran()
                 }
 
                 DrawText(("%c", s4), x / 2 - tailleS4 / 2, 100, 200, RED);
-                DrawText(TextFormat("Score : %d", score), x / 2 - tailleS5 / 2, 350, 75, GRAY); 
-                DrawText(TextFormat("Highscore: %d", scoresTab[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+
+                switch (difficultyLevel) {
+                case 0:
+                    DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreEasy()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                    DrawText(TextFormat("HIGHSCORE : %d", scoresTabEasy[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                    break;
+
+                case 1:
+                    DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreMedium()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                    DrawText(TextFormat("HIGHSCORE : %d", scoresTabMedium[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                    break;
+                case 2:
+                    DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreHard()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                    DrawText(TextFormat("HIGHSCORE : %d", scoresTabHard[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                    break;
+                default:
+                    break;
+                }
+               
                 for (int i = 0;i < 2;i++) {
                     DrawText(optionsGameOver[i].getString(), optionsGameOver[i].getPosition(x), y * 0.6+y*i*0.1, 40, tabColorsGameOver[i]);
                 }
