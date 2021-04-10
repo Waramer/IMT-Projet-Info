@@ -5,10 +5,16 @@
 
 using namespace std;
 
-Point::Point()
+Point::Point() {
+	p_x = 0;
+	p_y = 0;
+}
+
+Point::Point(int rayon)
 {
-	p_x = rand() % 11 - 5;
-	p_y = rand() % 11 - 5;
+	int diametre = 2 * rayon + 1;
+	p_x = rand() % diametre - rayon;
+	p_y = rand() % diametre - rayon;
 }
 Point::Point(int x, int y) {
 	p_x = x;
@@ -31,7 +37,7 @@ void Point::affiche() {
 	cout << "[" << this->get_x() << "," << this->get_y() << "]";
 }
 
-float Point::angle(Point p2)
+double Point::angle(Point p2)
 {
 	if (get_x() == p2.get_x()) { // si les deux points ont la même abscisse
 		if (get_y() < p2.get_y()) {
@@ -45,17 +51,21 @@ float Point::angle(Point p2)
 	else
 	{
 		if (get_x() < p2.get_x()) {
-			return 90 - 180 / 3.14159265358979323846 * atan((float)(p2.get_y() - get_y()) / (float)(p2.get_x() - get_x()));
+			return 90 - 180 / 3.14159265358979323846 * atan((double)(p2.get_y() - get_y()) / (double)(p2.get_x() - get_x()));
 		}
 		else if (get_x() > p2.get_x()) {
-			return 270 - 180 / 3.14159265358979323846 * atan((float)(p2.get_y() - get_y()) / (float)(p2.get_x() - get_x()));
+			return 270 - 180 / 3.14159265358979323846 * atan((double)(p2.get_y() - get_y()) / (double)(p2.get_x() - get_x()));
 		}
 		return 0;
 	}
 }
+
+// Points supperposés
 
 bool Point::estEgal(Point p2)
 {
 	if ((get_x() == p2.get_x()) && (get_y() == p2.get_y())) { return true; }
 	return false;
 }
+
+

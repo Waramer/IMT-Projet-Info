@@ -118,15 +118,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GRAPHICS_API_OPENGL_33;PLATFORM_DESKTOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;PLATFORM_DESKTOP;GRAPHICS_API_OPENGL_33;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\quentin\raylib-3.5.0\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Louis\Downloads\raylib-3.5.0\raylib-3.5.0\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\quentin\raylib-3.5.0\projects\VS2019\bin\x64\Release.DLL</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Louis\Downloads\raylib-3.5.0\raylib-3.5.0\projects\VS2019\bin\x64\Release.DLL</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -148,14 +148,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Ecran.cpp" />
+    <ClCompile Include="Jeu.cpp" />
     <ClCompile Include="Joueur.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="OptionMenu.cpp" />
+    <ClCompile Include="Tir.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Jeu.h" />
+    <ClInclude Include="OptionMenu.h" />
+    <ClInclude Include="Tir.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Joueur.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Ecran.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,13 +12,14 @@ private:
 
 public:
 	Point();
+	Point(int rayon);
 	Point(int x, int y);
 	int get_x();
 	int get_y();
 	void set_x(int x);
 	void set_y(int y);
 	void affiche();
-	float angle(Point p2);
+	double angle(Point p2);
 	bool estEgal(Point p2);
 };
 #endif
