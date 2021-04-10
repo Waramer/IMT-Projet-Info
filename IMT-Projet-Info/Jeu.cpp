@@ -153,11 +153,24 @@ bool Jeu::pointDansCurseur(Point point)
 void Jeu::tirsAuBut() {
 	for (int aste = j_asteroids.size() - 1; aste >= 0; aste--) {
 		for (int tir = 0; tir < j_tirs.size(); tir++) {
-			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX()-j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
+			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX() - j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
 				j_asteroids.push_back(Asteroid(10, 50));
-				j_joueur.setScore(j_joueur.getScore() + 100);
+				switch (j_difficulte) {
+				case 0:
+					j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 100);
+					break;
+
+				case 1:
+					j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 100);
+					break;
+				case 2:
+					j_joueur.setScoreHard(j_joueur.getScoreHard() + 100);
+					break;
+				default:
+					break;
+				}
 				break;
 			}
 		}

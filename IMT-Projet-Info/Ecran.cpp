@@ -29,7 +29,7 @@ Ecran::Ecran()
 
 
         Joueur joueur;
-        int score = 0;
+        
         
 
 
@@ -84,7 +84,9 @@ Ecran::Ecran()
 
         // Tableau des scores trié
 
-        int scoresTab[15] = {};
+        int scoresTabEasy[5] = {};
+        int scoresTabMedium[5] = {};
+        int scoresTabHard[5] = {};
         //int highscore = scoresTab[0];
         //char* scoresTabChar[15];
 
@@ -93,10 +95,10 @@ Ecran::Ecran()
         const char* s4 = "GAME OVER";
         int tailleS4 = MeasureText(s4, 200);
 
-        const char* s5 = "YOUR SCORE : " + score;
+        const char* s5 = "YOUR SCORE : ";
         int tailleS5 = MeasureText(s5, 75);
 
-        const char* s6 = "HIGHSCORE : " + joueur.getBestScore();
+        const char* s6 = "HIGHSCORE : ";
         int tailleS6 = MeasureText(s5, 75);
 
 
@@ -107,7 +109,7 @@ Ecran::Ecran()
 
         // choix options
         const char* displayTab[2] = { "OFF","ON" };
-        const char* difficultyTab[3] = { "EASY","NORMAL", "HARD" };
+        const char* difficultyTab[3] = { "EASY","MEDIUM", "HARD" };
         const char* musicTab[2] = { "ON","OFF" };
         int selectionSettings = 0;
         int selectionDisplay = fullScreen;
@@ -211,10 +213,25 @@ Ecran::Ecran()
             */        
 
             Jeu j(difficultyLevel, joueur);
+            int score = 0;
 
             while (res == 1) {
 
-                score = j.j_joueur.getScore();
+                switch (difficultyLevel) {
+                case 0:
+                    score = j.j_joueur.getScoreEasy();
+                    break;
+
+                case 1:
+                    score = j.j_joueur.getScoreMedium();
+                    break;
+                case 2:
+                    score = j.j_joueur.getScoreHard();
+                    break;
+                default:
+                    break;
+                }
+                
                 //affichage du haut de l'ecran
                 EnableCursor();
                 BeginDrawing();
@@ -273,25 +290,69 @@ Ecran::Ecran()
                 j.avancement(pointeur.x,pointeur.y,angle);
 
                 if (j.collisionCurseur(pointeur.x, pointeur.y, angle) == true) {
-                    
                     int tmp = 0;
-                    int newScoresTab[15] = {};
-                    for (int i = 0; i < 15;i++) {
-                        if (score >= scoresTab[i] && tmp == 0) {
-                            newScoresTab[i] = score;
-                            tmp += 1;
-                            for (int k = i; k < 14;k++) {
-                                newScoresTab[k + 1] = scoresTab[k];
+                    int newScoresTab[5] = {};
+
+                    switch (difficultyLevel) {
+                    case 0:
+                        for (int i = 0; i < 5;i++) {
+                            if (score >= scoresTabEasy[i] && tmp == 0) {
+                                newScoresTab[i] = score;
+                                tmp += 1;
+                                for (int k = i; k < 4;k++) {
+                                    newScoresTab[k + 1] = scoresTabEasy[k];
+                                }
+                            }
+                            else if (score < scoresTabEasy[i]) {
+                                newScoresTab[i] = scoresTabEasy[i];
                             }
                         }
-                        else if (score < scoresTab[i]) {
-                            newScoresTab[i] = scoresTab[i];
+                        for (int i = 0; i < 5;i++) {
+                            scoresTabEasy[i] = newScoresTab[i];
                         }
+                        
+                        break;
+
+                    case 1:
+                        for (int i = 0; i < 5;i++) {
+                            if (score >= scoresTabMedium[i] && tmp == 0) {
+                                newScoresTab[i] = score;
+                                tmp += 1;
+                                for (int k = i; k < 4;k++) {
+                                    newScoresTab[k + 1] = scoresTabMedium[k];
+                                }
+                            }
+                            else if (score < scoresTabMedium[i]) {
+                                newScoresTab[i] = scoresTabMedium[i];
+                            }
+                        }
+                        for (int i = 0; i < 5;i++) {
+                            scoresTabMedium[i] = newScoresTab[i];
+                        }
+
+                        break;
+                    case 2:
+                        for (int i = 0; i < 5;i++) {
+                            if (score >= scoresTabHard[i] && tmp == 0) {
+                                newScoresTab[i] = score;
+                                tmp += 1;
+                                for (int k = i; k < 4;k++) {
+                                    newScoresTab[k + 1] = scoresTabHard[k];
+                                }
+                            }
+                            else if (score < scoresTabHard[i]) {
+                                newScoresTab[i] = scoresTabHard[i];
+                            }
+                        }
+                        for (int i = 0; i < 5;i++) {
+                            scoresTabHard[i] = newScoresTab[i];
+                        }
+                        break;
+                    default:
+                        break;
                     }
-                    for (int i = 0; i < 15;i++) {
-                        scoresTab[i] = newScoresTab[i];
-                    }
-                    joueur.setBestScore(scoresTab[0]);
+                    
+                    
                     
                     StopSoundMulti();
                     PlaySoundMulti(sound5);
@@ -381,17 +442,23 @@ Ecran::Ecran()
                 ClearBackground(color);
 
                 DrawText(("%c", s2), x / 2 - tailleS2 / 2, 100, 120, WHITE);
+
+                DrawText("EASY : ", x / 4, 300, 40, WHITE);
                 for (int i = 0; i < 5;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 4, 300+100*i, 40, GRAY);
-                }
-                for (int i = 5; i < 10;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), x / 2, 300 + 100 * (i-5), 40, GRAY);
-                }
-                for (int i = 10; i < 15;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTab[i]), 3*x / 4, 300 + 100 * (i - 10), 40, GRAY);
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabEasy[i]), x / 4, 400+100*i, 40, GRAY);
                 }
 
-                DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 150, 40, RED);
+                DrawText("MEDIUM : ", x / 2, 300, 40, WHITE);
+                for (int i = 0; i < 5;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabMedium[i]), x / 2, 400 + 100 *i, 40, GRAY);
+                }
+
+                DrawText("HARD : ", 3*x / 4, 300, 40, WHITE);
+                for (int i = 0; i < 5;i++) {
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabHard[i]), 3*x / 4, 400 + 100 *i, 40, GRAY);
+                }
+
+                DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 100, 40, RED);
                 if (IsKeyPressed(KEY_ENTER)) {
                     res = 0;
                 }
@@ -547,8 +614,25 @@ Ecran::Ecran()
                 }
 
                 DrawText(("%c", s4), x / 2 - tailleS4 / 2, 100, 200, RED);
-                DrawText(TextFormat("Score : %d", score), x / 2 - tailleS5 / 2, 350, 75, GRAY); 
-                DrawText(TextFormat("Highscore: %d", scoresTab[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+
+                switch (difficultyLevel) {
+                case 0:
+                    DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreEasy()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                    DrawText(TextFormat("HIGHSCORE : %d", scoresTabEasy[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                    break;
+
+                case 1:
+                    DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreMedium()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                    DrawText(TextFormat("HIGHSCORE : %d", scoresTabMedium[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                    break;
+                case 2:
+                    DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreHard()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                    DrawText(TextFormat("HIGHSCORE : %d", scoresTabHard[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
+                    break;
+                default:
+                    break;
+                }
+               
                 for (int i = 0;i < 2;i++) {
                     DrawText(optionsGameOver[i].getString(), optionsGameOver[i].getPosition(x), y * 0.6+y*i*0.1, 40, tabColorsGameOver[i]);
                 }

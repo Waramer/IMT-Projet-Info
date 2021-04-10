@@ -10,16 +10,22 @@ class Joueur
 public:
 	Joueur();
 	std :: string getnom();
-	int getScore();
-	int getBestScore();
+	int getScoreEasy();
+	int getScoreMedium();
+	int getScoreHard();
+
 	void setNom(std::string nom);
-	void setScore(int score);
-	void setBestScore(int score);
+	void setScoreEasy(int score);
+	void setScoreMedium(int score);
+	void setScoreHard(int score);
+
 
 private:
 	std::string m_nom;
-	int m_score;
-	int m_best_score;
+	int m_scoreEasy;
+	int m_scoreMedium;
+	int m_scoreHard;
+
 };
 
 
