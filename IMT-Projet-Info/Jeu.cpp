@@ -43,7 +43,7 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 		j_tirColldown += 1;
 	}
 	if (j_timer == 1000) { j_timer = 0; }
-	// Augmentation du score
+	//Augmentation du score
 	if (j_timer % 40 * (j_difficulte + 1) == 0 && j_timer != 0) {
 		switch (j_difficulte) {
 		case 0:

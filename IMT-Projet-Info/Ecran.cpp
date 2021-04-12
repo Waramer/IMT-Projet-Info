@@ -29,7 +29,7 @@ Ecran::Ecran()
 
 
         Joueur joueur;
-        
+        Color bronze({ 205,127,50,255 });
 
         //initialisation de la fenêtre
         SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -245,7 +245,7 @@ Ecran::Ecran()
                 DrawText("PRESS P FOR PAUSE", x * 0.85 - (test * 0.5), y * 0.03, 40, WHITE);
                 DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.010, 40, WHITE);
                 DrawText(TextFormat("LEVEL : %s", difficultyTab[difficultyLevel]), x * 0.05, y * 0.055, 40, WHITE);
-                DrawLine(0, y * 0.1, x, y * 0.1, BLUE);
+                DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
 
                 float angle = GetGestureDragAngle();
                 double pi = 3.1415;
@@ -290,7 +290,7 @@ Ecran::Ecran()
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
-                DrawPolyLines(pointeur, 3, 20, angle, BLUE);
+                DrawPolyLines(pointeur, 3, 20, angle, GREEN);
 
                 j.avancement(pointeur.x,pointeur.y,angle);
 
@@ -459,19 +459,19 @@ Ecran::Ecran()
 
                 DrawText(("%c", s2), x / 2 - tailleS2 / 2, 100, 120, WHITE);
 
-                DrawText("EASY : ", x / 4, 300, 40, WHITE);
+                DrawText("EASY : ", x / 4, 300, 40, bronze);
                 for (int i = 0; i < 5;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabEasy[i]), x / 4, 400+100*i, 40, GRAY);
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabEasy[i]), x / 4, 400+100*i, 40, DARKGRAY);
                 }
 
-                DrawText("MEDIUM : ", x / 2, 300, 40, WHITE);
+                DrawText("MEDIUM : ", x / 2, 300, 40, LIGHTGRAY);
                 for (int i = 0; i < 5;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabMedium[i]), x / 2, 400 + 100 *i, 40, GRAY);
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabMedium[i]), x / 2, 400 + 100 *i, 40, DARKGRAY);
                 }
 
-                DrawText("HARD : ", 3*x / 4, 300, 40, WHITE);
+                DrawText("HARD : ", 3*x / 4, 300, 40, GOLD);
                 for (int i = 0; i < 5;i++) {
-                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabHard[i]), 3*x / 4, 400 + 100 *i, 40, GRAY);
+                    DrawText(TextFormat("#%d : %d", i + 1, scoresTabHard[i]), 3*x / 4, 400 + 100 *i, 40, DARKGRAY);
                 }
 
                 DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 100, 40, RED);

@@ -188,7 +188,7 @@ bool Asteroid::pointDansEnveloppe(Point point)
 void Asteroid::renduAsteroid()
 {
 	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
-		DrawLine(a_position[0]+a_points[a_enveloppe[pt]].get_x(), a_position[1] + a_points[a_enveloppe[pt]].get_y(), a_position[0] + a_points[a_enveloppe[pt+1]].get_x(), a_position[1] + a_points[a_enveloppe[pt+1]].get_y(), WHITE);
+		DrawLine(a_position[0]+a_points[a_enveloppe[pt]].get_x(), a_position[1] + a_points[a_enveloppe[pt]].get_y(), a_position[0] + a_points[a_enveloppe[pt+1]].get_x(), a_position[1] + a_points[a_enveloppe[pt+1]].get_y(), LIGHTGRAY);
 	}
 }
 
