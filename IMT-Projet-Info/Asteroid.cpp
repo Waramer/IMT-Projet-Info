@@ -193,8 +193,14 @@ void Asteroid::renduAsteroid()
 }
 
 void Asteroid::move() {
-	a_position[0] += 2*a_direction[0];
-	a_position[1] += 2*a_direction[1];
+	if (a_rayon == 50) {
+		a_position[0] += 3 * a_direction[0];
+		a_position[1] += 3 * a_direction[1];
+	}
+	if (a_rayon == 80) {
+		a_position[0] += 1 * a_direction[0];
+		a_position[1] += 1 * a_direction[1];
+	}
 }
 
 int Asteroid::getRayon()

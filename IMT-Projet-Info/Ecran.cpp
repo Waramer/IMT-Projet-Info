@@ -245,7 +245,7 @@ Ecran::Ecran()
                 DrawText("PRESS P FOR PAUSE", x * 0.85 - (test * 0.5), y * 0.03, 40, WHITE);
                 DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.010, 40, WHITE);
                 DrawText(TextFormat("LEVEL : %s", difficultyTab[difficultyLevel]), x * 0.05, y * 0.055, 40, WHITE);
-                DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
+                DrawLine(0, y * 0.1, x, y * 0.1, BLUE);
 
                 float angle = GetGestureDragAngle();
                 double pi = 3.1415;
@@ -273,16 +273,16 @@ Ecran::Ecran()
                         angle = 0;
                 }
                 //déplacer le pointeur quand on appuye sur le pavé directionnel
-                if (IsKeyDown(265) && ((int)pointeur.y == (int)(y * 0.1) || (int)(pointeur.y - 1) == (int)(y * 0.1))) pointeur.y = y;
+                if (IsKeyDown(265) && ((int)pointeur.y <= (int)(y * 0.1) )) pointeur.y = y;
                 else if (IsKeyDown(265))pointeur.y -= 3;
 
-                if (IsKeyDown(262) && pointeur.x == x)pointeur.x = 0;
+                if (IsKeyDown(262) && pointeur.x >= x)pointeur.x = 0;
                 else if (IsKeyDown(262))pointeur.x += 3;
 
-                if (IsKeyDown(263) && pointeur.x == 0)pointeur.x = x;
+                if (IsKeyDown(263) && pointeur.x <= 0)pointeur.x = x;
                 else if (IsKeyDown(263))pointeur.x -= 3;
 
-                if (IsKeyDown(264) && ((int)pointeur.y == y || (int)(pointeur.y + 1 == y))) {
+                if (IsKeyDown(264) && ((int)pointeur.y >= y )) {
                     pointeur.y = y * 0.1;
                 }
                 else if (IsKeyDown(264))pointeur.y += 3;
@@ -290,7 +290,7 @@ Ecran::Ecran()
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
-                DrawPolyLines(pointeur, 3, 20, angle, WHITE);
+                DrawPolyLines(pointeur, 3, 20, angle, BLUE);
 
                 j.avancement(pointeur.x,pointeur.y,angle);
 
