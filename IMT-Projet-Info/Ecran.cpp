@@ -30,8 +30,6 @@ Ecran::Ecran()
 
         Joueur joueur;
         
-        
-
 
         //initialisation de la fenêtre
         SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -73,7 +71,7 @@ Ecran::Ecran()
         int difficultyOptionsSizes[3] = { MeasureText("DIFFICULTY : EASY", 40), MeasureText("DIFFICULTY : MEDIUM", 40), MeasureText("DIFFICULTY : HARD", 40) };
         OptionMenu optionSettings3("MUSIC : ", false);
         int musicOptionsSizes[2] = { MeasureText("MUSIC : ON", 40), MeasureText("MUSIC : OFF", 40) };
-        OptionMenu optionSettings4("MAIN SCREEN", false);
+        OptionMenu optionSettings4("SAVE AND RETURN TO MAIN SCREEN", false);
         OptionMenu optionsSettings[4] = { optionSettings1, optionSettings2, optionSettings3, optionSettings4 };
         Color tabColorsSettings[4] = { optionsSettings[0].getColor(),optionsSettings[1].getColor() ,optionsSettings[2].getColor(),optionsSettings[3].getColor() };
 
@@ -195,6 +193,7 @@ Ecran::Ecran()
                     else if (selection == 3) {
                         // Quitter le jeu
                         StopSoundMulti();
+                        ClearBackground(BLACK);
                         break;
 
                     }
@@ -244,7 +243,8 @@ Ecran::Ecran()
                 int test = MeasureText("ASTEROID", 75);
                 DrawText("ASTEROID", x * 0.5 - (test * 0.5), y * 0.015, 75, WHITE);
                 DrawText("PRESS P FOR PAUSE", x * 0.85 - (test * 0.5), y * 0.03, 40, WHITE);
-                DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.03, 40, WHITE);
+                DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.010, 40, WHITE);
+                DrawText(TextFormat("LEVEL : %s", difficultyTab[difficultyLevel]), x * 0.05, y * 0.055, 40, WHITE);
                 DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
 
                 float angle = GetGestureDragAngle();
@@ -425,6 +425,7 @@ Ecran::Ecran()
                             pointeur.x = x * 0.5;
                             pointeur.y = y * 0.5;
                             res = 0;
+                            ClearBackground(BLACK);
                             StopSoundMulti();
                             if (musicON != 1) {
                                 PlaySoundMulti(sound);
@@ -475,6 +476,7 @@ Ecran::Ecran()
 
                 DrawText(("c", s3), x / 2 - tailleS3 / 2, y - 100, 40, RED);
                 if (IsKeyPressed(KEY_ENTER)) {
+                    ClearBackground(BLACK);
                     res = 0;
                 }
             
@@ -569,6 +571,7 @@ Ecran::Ecran()
                         else if (GetSoundsPlaying()==0)
                             PlaySoundMulti(sound);
 
+                        ClearBackground(BLACK);
                         selectionDisplay = fullScreen;
                         selectionDifficulty = difficultyLevel;
                         selectionMusic = musicON;
@@ -631,6 +634,7 @@ Ecran::Ecran()
                     }
                     else {
                         res = 0;
+                        ClearBackground(BLACK);
                         StopSoundMulti();
                         if (musicON != 1) {
                             PlaySoundMulti(sound);
