@@ -23,9 +23,9 @@ Jeu::Jeu(int difficult, Joueur j)
 	j_curseur.push_back(Point(500, 490));
 	j_curseur.push_back(Point(510, 500));
 	j_curseur.push_back(Point(490, 500));
-	
+
 	Joueur j_joueur;
-	
+
 }
 
 void Jeu::nextFrame() {
@@ -39,17 +39,17 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 	collisionCurseur(curs_x, curs_y, angle);
 	tirsAuBut();
 	j_timer += 1;
-	if (j_tirColldown < 20 * (j_difficulte+1)) {
+	if (j_tirColldown < 20 * (j_difficulte + 1)) {
 		j_tirColldown += 1;
 	}
 	if (j_timer == 1000) { j_timer = 0; }
 	// Augmentation du score
-	if (j_timer % 40*(j_difficulte+1) == 0 && j_timer !=0) {
-		switch (j_difficulte){
+	if (j_timer % 40 * (j_difficulte + 1) == 0 && j_timer != 0) {
+		switch (j_difficulte) {
 		case 0:
 			j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 100);
 			break;
-		
+
 		case 1:
 			j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 100);
 			break;
@@ -59,7 +59,7 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 		default:
 			break;
 		}
-	}	
+	}
 }
 
 
@@ -77,7 +77,7 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 		}
 	}
 	// ajout de tir
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_tirColldown==20*(j_difficulte+1)) {
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_tirColldown == 20 * (j_difficulte + 1)) {
 		j_tirs.push_back(Tir(curs_x, curs_y, angle));
 		j_tirColldown = 0;
 		PlaySoundMulti(sound3);
@@ -87,9 +87,9 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 // avancement des asteroids
 void Jeu::avancementAsteroid() {
 	// ajout asteroid
-	if (j_timer % (int)(100/(1+pow(j_difficulte,2))) == 0) {
+	if (j_timer % (int)(100 / (1 + pow(j_difficulte, 2))) == 0) {
 		j_asteroids.push_back(Asteroid(10, 50));
-		j_asteroids.push_back(Asteroid(10, 50));
+		j_asteroids.push_back(Asteroid(10, 80));
 	}
 	for (int i = j_asteroids.size() - 1; i >= 0; i--) {
 		// mouvement
@@ -107,9 +107,9 @@ void Jeu::avancementAsteroid() {
 }
 
 // Détection d'une collision entre le joueur et un asteroid
-bool Jeu::collisionCurseur(int curs_x,int curs_y,double angle) {
+bool Jeu::collisionCurseur(int curs_x, int curs_y, double angle) {
 	for (int ast = 0; ast < j_asteroids.size(); ast++) {
-		if (sqrt(pow(curs_x-j_asteroids[ast].getPosX(),2)+pow(curs_y - j_asteroids[ast].getPosY(),2)) <= (j_asteroids[ast].getRayon()*sqrt(2)+20) ) {
+		if (sqrt(pow(curs_x - j_asteroids[ast].getPosX(), 2) + pow(curs_y - j_asteroids[ast].getPosY(), 2)) <= (j_asteroids[ast].getRayon() * sqrt(2) + 20)) {
 			j_curseur[0] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin(-angle * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos(-angle * 3.14159 / 180));
 			j_curseur[1] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin((240 - angle) * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos((240 - angle) * 3.14159 / 180));
 			j_curseur[2] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin((120 - angle) * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos((120 - angle) * 3.14159 / 180));
@@ -135,8 +135,8 @@ bool Jeu::pointDansCurseur(Point point)
 	int angle0p = j_curseur[0].angle(point);
 	int angle01 = j_curseur[0].angle(j_curseur[1]);
 	int angle02 = j_curseur[0].angle(j_curseur[2]);
-	if (angle02 > 300 ) {
-		if ( angle0p < angle02 && angle0p > angle01 ) {
+	if (angle02 > 300) {
+		if (angle0p < angle02 && angle0p > angle01) {
 		}
 	}
 	else {
@@ -174,14 +174,17 @@ bool Jeu::pointDansCurseur(Point point)
 	return true;
 }
 
-// détection d'un tir dans un astéroid
+// détection d'un tir dans un asteroid
 void Jeu::tirsAuBut() {
 	for (int aste = j_asteroids.size() - 1; aste >= 0; aste--) {
 		for (int tir = 0; tir < j_tirs.size(); tir++) {
 			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX() - j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
-				j_asteroids.push_back(Asteroid(10, 50));
+				if(rand()%2==0)
+					j_asteroids.push_back(Asteroid(10, 50));
+				else 
+					j_asteroids.push_back(Asteroid(8,80));
 				PlaySoundMulti(sound4);
 				switch (j_difficulte) {
 				case 0:
