@@ -181,10 +181,10 @@ void Jeu::tirsAuBut() {
 			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX() - j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
-				if (rand() % 2 == 0)
+				if(rand()%2==0)
 					j_asteroids.push_back(Asteroid(10, 50));
-				else
-					j_asteroids.push_back(Asteroid(8, 80));
+				else 
+					j_asteroids.push_back(Asteroid(8,80));
 				PlaySoundMulti(sound4);
 				switch (j_difficulte) {
 				case 0:
