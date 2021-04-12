@@ -245,7 +245,7 @@ Ecran::Ecran()
                 DrawText("PRESS P FOR PAUSE", x * 0.85 - (test * 0.5), y * 0.03, 40, WHITE);
                 DrawText(TextFormat("SCORE : %d", score), x * 0.05, y * 0.010, 40, WHITE);
                 DrawText(TextFormat("LEVEL : %s", difficultyTab[difficultyLevel]), x * 0.05, y * 0.055, 40, WHITE);
-                DrawLine(0, y * 0.1, x, y * 0.1, BLUE);
+                DrawLine(0, y * 0.1, x, y * 0.1, WHITE);
 
                 float angle = GetGestureDragAngle();
                 double pi = 3.1415;
@@ -290,7 +290,7 @@ Ecran::Ecran()
                 //afficher le pointeur
                 bool element = false;
                 int a, b, c, d;
-                DrawPolyLines(pointeur, 3, 20, angle, BLUE);
+                DrawPolyLines(pointeur, 3, 20, angle, GREEN);
 
                 j.avancement(pointeur.x,pointeur.y,angle);
 
