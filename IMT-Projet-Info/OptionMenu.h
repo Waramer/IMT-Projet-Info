@@ -8,6 +8,7 @@ private:
     const char* s;
     int taille = MeasureText(s, 20);
     bool estSelectionne;
+
 public:
     // Constructeur
     OptionMenu(const char* s, bool selection);

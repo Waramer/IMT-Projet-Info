@@ -6,7 +6,7 @@
 #include <raylib.h>
 #include <cmath>
 
-//Classe codée par Louis Delacour, Clément Kieffer et Hugo Vanhille (musique)
+//Classe codée par Louis Delacour, Clément Kieffer et Hugo Vanhille 
 
 class Ecran {
 public:
