@@ -15,13 +15,13 @@ public:
 	Point();
 	Point(int rayon);
 	Point(int x, int y);
+	double angle(Point p2);
+	bool estEgal(Point p2);
+	void affiche();
 	int get_x();
 	int get_y();
 	void set_x(int x);
 	void set_y(int y);
-	void affiche();
-	double angle(Point p2);
-	bool estEgal(Point p2);
 };
 #endif
 

@@ -7,22 +7,28 @@ Clément Kieffer
 Louis Delacour
 Hugo Vanhille
 
-## Decription du code
+## Decription du programme
+Le programme démarre sur un menu d'acceuil dans lequel il est possible d'aller vers : une partie, la page des plus hauts score atteints (pas de sauvegarde), la page des paramètres (plein écran (non fonctionnel car empêche la sortie du jeu), difficulté (fonctionnel), et musique (fonctionnel)). Le dernier choix possible est celui de quitter le jeu (non fonctionnel pour une raison inconnue, pour quitter le jeu il faut fermer la console).
+Je principe du jeu est de rester en vie le plus longtemps sans entrer en collision avec un astéroid. Pour cela il suffit de les esquiver avec les flèches directionnelles ou de les détruire en pointant la souris dans la direction voulue et le cas échéant de tirer avec le bouton gauche de la souris.
 
+## Description du code
 ### Dans le main
+Le main contient actuellement le code pour générer un écran, qui est la base du programme.
+### Classe Point
+Représente un point en 2D, avec des méthodes classiques à propos des coordonnées, une fonction pour détecter si deux points sont supperposés et une fonction pour retourner l'angle (en degrés) du vecteur entre deux points.
+### Classe Asteroid
+Représente un astéroid à partir d'un esemble de points et d'attributs géométriques. S'y trouve aussi les attributs et méthodes utilisés pour le déplacement d'un asteroid, la création de son enveloppe et la détection d'un point dans son enveloppe.
+### Classe Tir
+Classe qui représnete un tir à partir de coordonnées et qui contient le nécessaire à son mouvement.
+### Classe Joueur
+Représente un joueur avec les données relatives à un joueur.
+### Classe OptionMenu
+Représente une ligne de menu, sélectionnable avec le clavier et qui amène vers d'autre écran.
+### Classe Jeu
+La classe jeu comprend la majorité des algorithmes nécessaire au bon déroulement du jeu. On y trouve notamment les méthodes de collisions entre asteroids, joueur et tirs. Le principe de base et que le jeu avant de trame en trame grace à une méthode d'"avancement". Ensuite des méthodes "rendu" affiche tous les éléments graphiques.
+### Classe Ecran
+Cette classe génère un écran du jeu, il gère les différents écrans et appelle la classe jeu afin de lancer une partie.
 
-Le main contient actuellement le code pour montrer les résultat des algorithmes relatifs à l'enveloppe ( donc aux classes Asteroid et Point ) ainsi qu'un test d'un première fenêtre utilisant la bibliothèque Raylib.
-
-### Asteroid, Point et l'enveloppe
-
-Point est une classe simple qui représente un point dans l'espace avec des coordonnées X et Y. Plusieurs méthodes relatives à la position d'un point par rapport à un autre sont aussi implémentées pour être utilisées ailleurs.
-
-Asteroid est une classe qui représnete un astéroïd grâce à un vecteur de Points. Plusieurs méthode ont été créées afin de construire une méthode finale permettant de définir l'attribut d'enveloppe d'un asteroid.
-
-### Raylib et les fenêtres
-Pas de classes créées pour le moment à cette fin, tout se trouve encore dans les branches des collaborateurs travillant dessus.
-
-### Divers
-
+## Divers
 En cas de soucis avec la bibliothèque Raylib, nous avons utilisé ce guide :
 https://github.com/raysan5/raylib/wiki/Create-Visual-Studio-2019-Project?fbclid=IwAR0bYCk1tebgWyAz46kFeC1OHeDOgAmbQe1RciptH8lFvHH349vEQqWsxXM

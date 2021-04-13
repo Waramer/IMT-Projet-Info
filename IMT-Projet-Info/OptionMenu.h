@@ -13,6 +13,10 @@ public:
     // Constructeur
     OptionMenu(const char* s, bool selection);
 
+    // Méthodes
+    void selection();
+    void deselection();
+
     // Accesseurs
     Color getColor() const;
     const char* getString() const;
@@ -23,8 +27,6 @@ public:
     void setSelection(bool selection);
     void setColor(Color color);
    
-    // Autres Méthodes
-    void selection();
-    void deselection();
+    
 
 };

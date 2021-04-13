@@ -1,5 +1,6 @@
 #include "optionMenu.h"
 
+// Constructeur
 OptionMenu::OptionMenu(const char* s, bool selection) {
     this->s = s;
     this->estSelectionne = selection;
@@ -10,6 +11,17 @@ OptionMenu::OptionMenu(const char* s, bool selection) {
     else setColor(WHITE);
 }
 
+// Méthodes
+void OptionMenu::selection() {
+    setColor(RED);
+    setSelection(true);
+}
+void OptionMenu::deselection() {
+    setColor(WHITE);
+    setSelection(false);
+}
+
+// Accesseurs
 Color OptionMenu::getColor() const{
     return color;
 }
@@ -26,6 +38,7 @@ bool OptionMenu::getSelection() const {
     return estSelectionne;
 }
 
+// Mutateurs
 void OptionMenu::setColor(Color color) {
     this->color = color;
 }
@@ -34,12 +47,4 @@ void OptionMenu::setSelection(bool selection) {
     this->estSelectionne = selection;
 }
 
-void OptionMenu::selection() {
-    setColor(RED);
-    setSelection(true);
-}
-void OptionMenu::deselection() {
-    setColor(WHITE);
-    setSelection(false);
-}
 
