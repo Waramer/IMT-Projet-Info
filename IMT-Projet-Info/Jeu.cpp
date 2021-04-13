@@ -1,8 +1,13 @@
 #include "Jeu.h"
 #include "raylib.h"
+#include "Ecran.h"
 #include <iostream>
 using namespace std;
-Jeu::Jeu(int difficult)
+
+Sound sound4 = LoadSound("explosion.wav");
+Sound sound3 = LoadSound("tir.wav");
+
+Jeu::Jeu(int difficult, Joueur j)
 {
 	srand((unsigned)time(0));
 	j_difficulte = difficult;
@@ -18,6 +23,9 @@ Jeu::Jeu(int difficult)
 	j_curseur.push_back(Point(500, 490));
 	j_curseur.push_back(Point(510, 500));
 	j_curseur.push_back(Point(490, 500));
+
+	Joueur j_joueur;
+
 }
 
 void Jeu::nextFrame() {
@@ -31,11 +39,30 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 	collisionCurseur(curs_x, curs_y, angle);
 	tirsAuBut();
 	j_timer += 1;
-	if (j_tirColldown < 20 * (j_difficulte+1)) {
+	if (j_tirColldown < 20 * (j_difficulte + 1)) {
 		j_tirColldown += 1;
 	}
 	if (j_timer == 1000) { j_timer = 0; }
+	//Augmentation du score
+	if (j_timer % 40 * (j_difficulte + 1) == 0 && j_timer != 0) {
+		switch (j_difficulte) {
+		case 0:
+			j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 100);
+			break;
+
+		case 1:
+			j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 100);
+			break;
+		case 2:
+			j_joueur.setScoreHard(j_joueur.getScoreHard() + 100);
+			break;
+		default:
+			break;
+		}
+	}
 }
+
+
 
 // avancement des tirs
 void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
@@ -50,18 +77,19 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 		}
 	}
 	// ajout de tir
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_tirColldown==20*(j_difficulte+1)) {
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && j_tirColldown == 20 * (j_difficulte + 1)) {
 		j_tirs.push_back(Tir(curs_x, curs_y, angle));
 		j_tirColldown = 0;
+		PlaySoundMulti(sound3);
 	}
 }
 
 // avancement des asteroids
 void Jeu::avancementAsteroid() {
 	// ajout asteroid
-	if (j_timer % (int)(100/(1+pow(j_difficulte,2))) == 0) {
+	if (j_timer % (int)(100 / (1 + pow(j_difficulte, 2))) == 0) {
 		j_asteroids.push_back(Asteroid(10, 50));
-		j_asteroids.push_back(Asteroid(10, 50));
+		j_asteroids.push_back(Asteroid(10, 80));
 	}
 	for (int i = j_asteroids.size() - 1; i >= 0; i--) {
 		// mouvement
@@ -70,8 +98,19 @@ void Jeu::avancementAsteroid() {
 		if ((j_asteroids[i].getPosX() < 0) || (j_asteroids[i].getPosX() > GetScreenWidth()) || (j_asteroids[i].getPosY() < GetScreenHeight() * 0.09) || (j_asteroids[i].getPosY() > GetScreenHeight())) {
 			j_asteroids.erase(j_asteroids.begin() + i);
 		}
+		// Colision entre asteroids
+		// Code non terminé, encore des problème de directions et d'exception "out of range"
+		/*
+		if (j_asteroids.size()>=2) { // s'il y a au moins  2 asteroids
+			for (int j = j_asteroids.size() - 1; j >= 0; j--) {
+				if (i != j) {
+					j_asteroids[i].collisionEntreAsteroid(j_asteroids[j]);
+				}
+			}
+		}
+		*/
 	}
-	DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.06, 30, WHITE);
+	//DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.06, 30, WHITE);
 	for (int i = 0; i < j_asteroids.size(); i++) {
 		j_asteroids[i].renduAsteroid();
 
@@ -79,19 +118,19 @@ void Jeu::avancementAsteroid() {
 }
 
 // Détection d'une collision entre le joueur et un asteroid
-bool Jeu::collisionCurseur(int curs_x,int curs_y,double angle) {
+bool Jeu::collisionCurseur(int curs_x, int curs_y, double angle) {
 	for (int ast = 0; ast < j_asteroids.size(); ast++) {
-		if (sqrt(pow(curs_x-j_asteroids[ast].getPosX(),2)+pow(curs_y - j_asteroids[ast].getPosY(),2)) <= (j_asteroids[ast].getRayon()*sqrt(2)+20) ) {
+		if (sqrt(pow(curs_x - j_asteroids[ast].getPosX(), 2) + pow(curs_y - j_asteroids[ast].getPosY(), 2)) <= (j_asteroids[ast].getRayon() * sqrt(2) + 20)) {
 			j_curseur[0] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin(-angle * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos(-angle * 3.14159 / 180));
 			j_curseur[1] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin((240 - angle) * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos((240 - angle) * 3.14159 / 180));
 			j_curseur[2] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin((120 - angle) * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos((120 - angle) * 3.14159 / 180));
 			if ((j_asteroids[ast].pointDansEnveloppe(j_curseur[0])) || (j_asteroids[ast].pointDansEnveloppe(j_curseur[1])) || (j_asteroids[ast].pointDansEnveloppe(j_curseur[2]))) {
-				DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
+				//DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
 				return true;
 			}
 			for (int pt = 0; pt < j_asteroids[ast].getEnvelopList().size() - 1; pt++) {
 				if (this->pointDansCurseur(j_asteroids[ast].getPoints()[j_asteroids[ast].getEnvelopList()[pt]])) {
-					DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
+					//DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
 					return true;
 				}
 			}
@@ -107,8 +146,8 @@ bool Jeu::pointDansCurseur(Point point)
 	int angle0p = j_curseur[0].angle(point);
 	int angle01 = j_curseur[0].angle(j_curseur[1]);
 	int angle02 = j_curseur[0].angle(j_curseur[2]);
-	if (angle02 > 300 ) {
-		if ( angle0p < angle02 && angle0p > angle01 ) {
+	if (angle02 > 300) {
+		if (angle0p < angle02 && angle0p > angle01) {
 		}
 	}
 	else {
@@ -146,14 +185,32 @@ bool Jeu::pointDansCurseur(Point point)
 	return true;
 }
 
-// détection d'un tir dans un astéroid
+// détection d'un tir dans un asteroid
 void Jeu::tirsAuBut() {
 	for (int aste = j_asteroids.size() - 1; aste >= 0; aste--) {
 		for (int tir = 0; tir < j_tirs.size(); tir++) {
-			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX()-j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
+			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX() - j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
 				j_asteroids.erase(j_asteroids.begin() + aste);
 				j_tirs.erase(j_tirs.begin() + tir);
-				j_asteroids.push_back(Asteroid(10, 50));
+				if(rand()%2==0)
+					j_asteroids.push_back(Asteroid(10, 50));
+				else 
+					j_asteroids.push_back(Asteroid(8,80));
+				PlaySoundMulti(sound4);
+				switch (j_difficulte) {
+				case 0:
+					j_joueur.setScoreEasy(j_joueur.getScoreEasy() + 25);
+					break;
+
+				case 1:
+					j_joueur.setScoreMedium(j_joueur.getScoreMedium() + 25);
+					break;
+				case 2:
+					j_joueur.setScoreHard(j_joueur.getScoreHard() + 25);
+					break;
+				default:
+					break;
+				}
 				break;
 			}
 		}
