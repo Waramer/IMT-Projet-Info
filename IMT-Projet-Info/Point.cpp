@@ -16,26 +16,12 @@ Point::Point(int rayon)
 	p_x = rand() % diametre - rayon;
 	p_y = rand() % diametre - rayon;
 }
+
 Point::Point(int x, int y) {
 	p_x = x;
 	p_y = y;
 }
 
-int Point::get_x() {
-	return p_x;
-}
-int Point::get_y() {
-	return p_y;
-}
-void Point::set_x(int x) {
-	p_x = x;
-}
-void Point::set_y(int y) {
-	p_y = y;
-}
-void Point::affiche() {
-	cout << "[" << this->get_x() << "," << this->get_y() << "]";
-}
 
 double Point::angle(Point p2)
 {
@@ -68,4 +54,22 @@ bool Point::estEgal(Point p2)
 	return false;
 }
 
+void Point::affiche() {
+	cout << "[" << this->get_x() << "," << this->get_y() << "]";
+}
 
+int Point::get_x() {
+	return p_x;
+}
+
+int Point::get_y() {
+	return p_y;
+}
+
+void Point::set_x(int x) {
+	p_x = x;
+}
+
+void Point::set_y(int y) {
+	p_y = y;
+}
