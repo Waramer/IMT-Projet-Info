@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 
+//Classe codée par Hugo Vanhille et Louis Delacour
 class Joueur
 {
 public:

@@ -7,20 +7,19 @@
 #include "Tir.h"
 #include "Joueur.h"
 
+//Classe codée par Quentin Delezenne, et Hugo Vanhille (sons)
 class Jeu
 {
 public:
 	Jeu(int difficult, Joueur j);
 	void nextFrame();
-	void avancement(int curs_x, int curs_y, double angle);
+	void avancement(int curs_x, int curs_y, double angle);    //avec contribution de Louis Delacour
 	void avancementTirs(int curs_x, int curs_y, double angle);
 	void avancementAsteroid();
 	bool collisionCurseur(int curs_x, int curs_y, double angle);
 	bool pointDansCurseur(Point point);
 	Joueur j_joueur;
-	
-
-	void tirsAuBut();
+	void tirsAuBut();										//avec contribution de louis Delacour
 
 private:
 	std::vector<Asteroid> j_asteroids;

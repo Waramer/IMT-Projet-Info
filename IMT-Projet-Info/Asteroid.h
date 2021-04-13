@@ -7,6 +7,8 @@
 #include <vector>
 #include "Point.h"
 
+/*Classe codée par Quentin Delezenne */
+
 class Asteroid
 {
 public:
@@ -26,7 +28,7 @@ public:
 	double getDirX();
 	double getDirY();
 	void setDirection(double dirX, double dirY);
-	void move();
+	void move();									//avec contribution de Hugo Vanhille
 	int getRayon();
 
 private:
