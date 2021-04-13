@@ -59,6 +59,23 @@ double Asteroid::getPosY() {
 	return a_position[1];
 }
 
+double Asteroid::getDirX()
+{
+	return a_direction[0];
+}
+
+double Asteroid::getDirY()
+{
+	return a_direction[1];
+}
+
+void Asteroid::setDirection(double dirX, double dirY)
+{
+	a_direction[0] = dirX;
+	a_direction[1] = dirY;
+}
+
+
 void Asteroid::affiche()
 {
 	cout << "Voici les points de l'Asteroid : " << endl;
@@ -182,6 +199,31 @@ bool Asteroid::pointDansEnveloppe(Point point)
 	}
 	return true;
 }
+
+// Colision entre astéroids
+bool Asteroid::collisionEntreAsteroid(Asteroid aste) {
+	if (sqrt(pow(aste.a_position[0] - a_position[0], 2) + pow(aste.a_position[1] - a_position[1], 2)) <= a_rayon + aste.a_rayon) {
+		for (int pt = 0; pt < a_enveloppe.size()-1; pt++) {
+			if (aste.pointDansEnveloppe(Point(a_points[a_enveloppe[pt]].get_x() + a_position[0] - aste.getPosX(), a_points[a_enveloppe[pt]].get_y() + a_position[1] - aste.getPosY()))) {
+				//DrawText("Collision Asteroids", 100, 300, 50, WHITE);
+				this->postCollisionTrajectoire(aste);
+				this->move();
+				aste.move();
+				return true;
+			}
+		}
+	}
+	return false;
+}
+void Asteroid::postCollisionTrajectoire(Asteroid aste) {
+	double tampon1 = a_direction[0];
+	double tampon2 = a_direction[1];
+	a_direction[0] = aste.getDirX();
+	a_direction[1] = aste.getDirY();
+	aste.setDirection(tampon1, tampon2);
+}
+
+
 
 // Code du rendu graphique
 

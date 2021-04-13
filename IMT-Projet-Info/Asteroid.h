@@ -17,10 +17,15 @@ public:
 	std::vector<int> getEnvelopList();
 	std::vector<Point> getPoints();
 	bool pointDansEnveloppe(Point point);
+	bool collisionEntreAsteroid(Asteroid aste);
+	void postCollisionTrajectoire(Asteroid aste);
 	void renduAsteroid();
 	void setPosition(int x, int y);
 	double getPosX();
 	double getPosY();
+	double getDirX();
+	double getDirY();
+	void setDirection(double dirX, double dirY);
 	void move();
 	int getRayon();
 

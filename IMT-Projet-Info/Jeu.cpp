@@ -98,6 +98,17 @@ void Jeu::avancementAsteroid() {
 		if ((j_asteroids[i].getPosX() < 0) || (j_asteroids[i].getPosX() > GetScreenWidth()) || (j_asteroids[i].getPosY() < GetScreenHeight() * 0.09) || (j_asteroids[i].getPosY() > GetScreenHeight())) {
 			j_asteroids.erase(j_asteroids.begin() + i);
 		}
+		// Colision entre asteroids
+		// Code non terminé, encore des problème de directions et d'exception "out of range"
+		/*
+		if (j_asteroids.size()>=2) { // s'il y a au moins  2 asteroids
+			for (int j = j_asteroids.size() - 1; j >= 0; j--) {
+				if (i != j) {
+					j_asteroids[i].collisionEntreAsteroid(j_asteroids[j]);
+				}
+			}
+		}
+		*/
 	}
 	//DrawText(TextFormat("Nb Asteroids : %i", j_asteroids.size()), GetScreenWidth() * 0.05, GetScreenHeight() * 0.06, 30, WHITE);
 	for (int i = 0; i < j_asteroids.size(); i++) {
@@ -114,12 +125,12 @@ bool Jeu::collisionCurseur(int curs_x, int curs_y, double angle) {
 			j_curseur[1] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin((240 - angle) * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos((240 - angle) * 3.14159 / 180));
 			j_curseur[2] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin((120 - angle) * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos((120 - angle) * 3.14159 / 180));
 			if ((j_asteroids[ast].pointDansEnveloppe(j_curseur[0])) || (j_asteroids[ast].pointDansEnveloppe(j_curseur[1])) || (j_asteroids[ast].pointDansEnveloppe(j_curseur[2]))) {
-				DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
+				//DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
 				return true;
 			}
 			for (int pt = 0; pt < j_asteroids[ast].getEnvelopList().size() - 1; pt++) {
 				if (this->pointDansCurseur(j_asteroids[ast].getPoints()[j_asteroids[ast].getEnvelopList()[pt]])) {
-					DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
+					//DrawText("Collision", GetScreenWidth() * 0.05, GetScreenHeight() * 0.15, 50, WHITE);
 					return true;
 				}
 			}
