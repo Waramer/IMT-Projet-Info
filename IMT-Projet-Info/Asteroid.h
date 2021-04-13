@@ -13,23 +13,26 @@ class Asteroid
 {
 public:
 	Asteroid(int nb_points, int rayon);
-	void affiche();
+
 	int envelopFindInitPoint();
 	void envelopFindList();
-	std::vector<int> getEnvelopList();
-	std::vector<Point> getPoints();
 	bool pointDansEnveloppe(Point point);
 	bool collisionEntreAsteroid(Asteroid aste);
 	void postCollisionTrajectoire(Asteroid aste);
 	void renduAsteroid();
+	void move();									//avec contribution de Hugo Vanhille
+
+	void affiche();
+
+	std::vector<int> getEnvelopList();
+	std::vector<Point> getPoints();
+	int getRayon();
 	void setPosition(int x, int y);
+	void setDirection(double dirX, double dirY);
 	double getPosX();
 	double getPosY();
 	double getDirX();
 	double getDirY();
-	void setDirection(double dirX, double dirY);
-	void move();									//avec contribution de Hugo Vanhille
-	int getRayon();
 
 private:
 	std::vector<Point> a_points;

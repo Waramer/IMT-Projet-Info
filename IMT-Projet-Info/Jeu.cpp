@@ -7,6 +7,8 @@ using namespace std;
 Sound sound4 = LoadSound("explosion.wav");
 Sound sound3 = LoadSound("tir.wav");
 
+//Constructeur
+
 Jeu::Jeu(int difficult, Joueur j)
 {
 	srand((unsigned)time(0));
@@ -28,12 +30,11 @@ Jeu::Jeu(int difficult, Joueur j)
 
 }
 
-void Jeu::nextFrame() {
-}
 
-// Avanvancement du jeu en général
-void Jeu::avancement(int curs_x, int curs_y, double angle)
-{
+// Méthodes
+
+void Jeu::avancement(int curs_x, int curs_y, double angle){
+	// Code d'avancement du jeu d'une trame
 	avancementTirs(curs_x, curs_y, angle);
 	avancementAsteroid();
 	collisionCurseur(curs_x, curs_y, angle);
@@ -62,10 +63,8 @@ void Jeu::avancement(int curs_x, int curs_y, double angle)
 	}
 }
 
-
-
-// avancement des tirs
 void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
+	// Code d'avancement de l'ensemble des tirs
 	for (int i = 0; i < j_tirs.size(); i++) {
 		// mouvement
 		j_tirs[i].move();
@@ -84,9 +83,8 @@ void Jeu::avancementTirs(int curs_x, int curs_y, double angle) {
 	}
 }
 
-// avancement des asteroids
 void Jeu::avancementAsteroid() {
-	// ajout asteroid
+	// Code d'avancement de l'ensemble des astéroides
 	if (j_timer % (int)(100 / (1 + pow(j_difficulte, 2))) == 0) {
 		j_asteroids.push_back(Asteroid(10, 50));
 		j_asteroids.push_back(Asteroid(10, 80));
@@ -99,7 +97,7 @@ void Jeu::avancementAsteroid() {
 			j_asteroids.erase(j_asteroids.begin() + i);
 		}
 		// Colision entre asteroids
-		// Code non terminé, encore des problème de directions et d'exception "out of range"
+		// Code non terminé, encore des problème de direction
 		/*
 		if (j_asteroids.size()>=2) { // s'il y a au moins  2 asteroids
 			for (int j = j_asteroids.size() - 1; j >= 0; j--) {
@@ -117,8 +115,8 @@ void Jeu::avancementAsteroid() {
 	}
 }
 
-// Détection d'une collision entre le joueur et un asteroid
 bool Jeu::collisionCurseur(int curs_x, int curs_y, double angle) {
+	// Code de détection d'une colision entre le curseur du joueur et un des astéroid
 	for (int ast = 0; ast < j_asteroids.size(); ast++) {
 		if (sqrt(pow(curs_x - j_asteroids[ast].getPosX(), 2) + pow(curs_y - j_asteroids[ast].getPosY(), 2)) <= (j_asteroids[ast].getRayon() * sqrt(2) + 20)) {
 			j_curseur[0] = Point(curs_x - j_asteroids[ast].getPosX() + 20 * sin(-angle * 3.14159 / 180), curs_y - j_asteroids[ast].getPosY() + 20 * cos(-angle * 3.14159 / 180));
@@ -139,9 +137,8 @@ bool Jeu::collisionCurseur(int curs_x, int curs_y, double angle) {
 	return false;
 }
 
-// Détection d'un point dans le curseur
 bool Jeu::pointDansCurseur(Point point)
-{
+{	// Code pour détceter su un point se trouve dans le curseur du joueur
 	//1e angle de vue
 	int angle0p = j_curseur[0].angle(point);
 	int angle01 = j_curseur[0].angle(j_curseur[1]);
@@ -185,8 +182,8 @@ bool Jeu::pointDansCurseur(Point point)
 	return true;
 }
 
-// détection d'un tir dans un asteroid
 void Jeu::tirsAuBut() {
+	// Code pour détecter la collision entre un tir et un astéroid et procéder à l'effacement de cest deux entité et le respawn d'un nouvel astéroide
 	for (int aste = j_asteroids.size() - 1; aste >= 0; aste--) {
 		for (int tir = 0; tir < j_tirs.size(); tir++) {
 			if (j_asteroids[aste].pointDansEnveloppe(Point(j_tirs[tir].getX() - j_asteroids[aste].getPosX(), j_tirs[tir].getY() - j_asteroids[aste].getPosY()))) {
@@ -215,4 +212,12 @@ void Jeu::tirsAuBut() {
 			}
 		}
 	}
+}
+
+
+// Accesseurs
+
+Joueur Jeu::getJoueur()
+{
+	return j_joueur;
 }

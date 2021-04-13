@@ -12,16 +12,18 @@ class Jeu
 {
 public:
 	Jeu(int difficult, Joueur j);
-	void nextFrame();
+
 	void avancement(int curs_x, int curs_y, double angle);    //avec contribution de Louis Delacour
 	void avancementTirs(int curs_x, int curs_y, double angle);
 	void avancementAsteroid();
 	bool collisionCurseur(int curs_x, int curs_y, double angle);
 	bool pointDansCurseur(Point point);
-	Joueur j_joueur;
 	void tirsAuBut();										//avec contribution de louis Delacour
 
+	Joueur getJoueur();
+
 private:
+	Joueur j_joueur;
 	std::vector<Asteroid> j_asteroids;
 	std::vector<Tir> j_tirs;
 	std::vector<Point>j_curseur;
@@ -30,7 +32,5 @@ private:
 	bool j_etat;
 	int j_difficulte;
 	int j_tirColldown;
-
-
 };
 #endif

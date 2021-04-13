@@ -6,6 +6,8 @@
 
 using namespace std;
 
+// Constructeur
+
 Asteroid::Asteroid(int nb_points, int rayon)
 {
 	a_rayon = rayon;
@@ -47,47 +49,11 @@ Asteroid::Asteroid(int nb_points, int rayon)
 	envelopFindList();
 }
 
-void Asteroid::setPosition(int x, int y)
-{
-	a_position[0] = x;
-	a_position[1] = y;
-}
-double Asteroid::getPosX() {
-	return a_position[0];
-}
-double Asteroid::getPosY() {
-	return a_position[1];
-}
 
-double Asteroid::getDirX()
-{
-	return a_direction[0];
-}
-
-double Asteroid::getDirY()
-{
-	return a_direction[1];
-}
-
-void Asteroid::setDirection(double dirX, double dirY)
-{
-	a_direction[0] = dirX;
-	a_direction[1] = dirY;
-}
-
-
-void Asteroid::affiche()
-{
-	cout << "Voici les points de l'Asteroid : " << endl;
-	for (int pt = 0; pt < a_nbPoints; pt++) {
-		a_points[pt].affiche();
-		cout << endl;
-	}
-}
-
-// Code de l'enveloppe
+// Méthodes
 
 int Asteroid::envelopFindInitPoint() {
+	// Code pour trouver le premier point de l'enveloppe à l'extrémité négative en x
 	int m = 0;
 	for (int n = 1; n < a_nbPoints; n++) {
 		if (a_points[n].get_x() <= a_points[m].get_x()) {
@@ -106,22 +72,23 @@ int Asteroid::envelopFindInitPoint() {
 }
 
 void Asteroid::envelopFindList() {
+	// Code pour établir l'enveloppe dans une liste d'entier donnant, dans l'ordre, la liste des indices des points constituant l'enveloppe
 	int initPoint = this->envelopFindInitPoint();
 	int actualPoint = initPoint;
 	bool retour = false;
-	a_enveloppe.push_back(actualPoint); // début de l'enveloppe
+	a_enveloppe.push_back(actualPoint);																										// début de l'enveloppe
 	while (true){
 		double angle = 360;
 		int nextPoint = actualPoint;
 		for (int pt = 0; pt < a_nbPoints; pt++) {
-			if (!(a_points[actualPoint].estEgal(a_points[pt]))) { // on considère uniquement les points différents de celui actuel pour poursuivre l'enveloppe
-				if (retour) {
+			if (!(a_points[actualPoint].estEgal(a_points[pt]))) {																			// on considère uniquement les points différents de celui actuel pour poursuivre l'enveloppe
+				if (retour) {																												// dans le sens retour, on évite de revenir en arrière, on regarde le plus à gauche
 					if (((a_points[actualPoint].angle(a_points[pt])) <= angle)&&((a_points[actualPoint].angle(a_points[pt])) > 180 )) {
 						angle = a_points[actualPoint].angle(a_points[pt]);
 						nextPoint = pt;
 					}
 				}
-				else{
+				else{																														// on regarde le plus à gauche
 					if ((a_points[actualPoint].angle(a_points[pt])) <= angle) {
 						angle = a_points[actualPoint].angle(a_points[pt]);
 						nextPoint = pt;
@@ -138,19 +105,8 @@ void Asteroid::envelopFindList() {
 	}
 }
 
-vector<int> Asteroid::getEnvelopList() {
-	return a_enveloppe;
-}
-
-std::vector<Point> Asteroid::getPoints()
-{
-	return a_points;
-}
-
-// Code de collision
-
-bool Asteroid::pointDansEnveloppe(Point point)
-{
+bool Asteroid::pointDansEnveloppe(Point point){
+	// Code pour savoir si le poitn en paramêtre se trouve dans l'enveloppe de l'astéroid
 	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
 
 		Point p1 = a_points[a_enveloppe[pt]];
@@ -200,8 +156,8 @@ bool Asteroid::pointDansEnveloppe(Point point)
 	return true;
 }
 
-// Colision entre astéroids
 bool Asteroid::collisionEntreAsteroid(Asteroid aste) {
+	// Code pour détecter une collision entre deux astéroids
 	if (sqrt(pow(aste.a_position[0] - a_position[0], 2) + pow(aste.a_position[1] - a_position[1], 2)) <= a_rayon + aste.a_rayon) {
 		for (int pt = 0; pt < a_enveloppe.size()-1; pt++) {
 			if (aste.pointDansEnveloppe(Point(a_points[a_enveloppe[pt]].get_x() + a_position[0] - aste.getPosX(), a_points[a_enveloppe[pt]].get_y() + a_position[1] - aste.getPosY()))) {
@@ -216,6 +172,7 @@ bool Asteroid::collisionEntreAsteroid(Asteroid aste) {
 	return false;
 }
 void Asteroid::postCollisionTrajectoire(Asteroid aste) {
+	// Code pour établir des trajectoires après une collision
 	double tampon1 = a_direction[0];
 	double tampon2 = a_direction[1];
 	a_direction[0] = aste.getDirX();
@@ -223,18 +180,15 @@ void Asteroid::postCollisionTrajectoire(Asteroid aste) {
 	aste.setDirection(tampon1, tampon2);
 }
 
-
-
-// Code du rendu graphique
-
-void Asteroid::renduAsteroid()
-{
+void Asteroid::renduAsteroid(){
+	// Code pour afficher un asteroid dans le jeu
 	for (int pt = 0; pt < a_enveloppe.size() - 1; pt++) {
 		DrawLine(a_position[0]+a_points[a_enveloppe[pt]].get_x(), a_position[1] + a_points[a_enveloppe[pt]].get_y(), a_position[0] + a_points[a_enveloppe[pt+1]].get_x(), a_position[1] + a_points[a_enveloppe[pt+1]].get_y(), LIGHTGRAY);
 	}
 }
 
 void Asteroid::move() {
+	// Code pour effectuer un mouvement d'astéroid
 	if (a_rayon == 50) {
 		a_position[0] += 3 * a_direction[0];
 		a_position[1] += 3 * a_direction[1];
@@ -245,9 +199,58 @@ void Asteroid::move() {
 	}
 }
 
+void Asteroid::affiche(){
+	// Code pour afficher les points d'un astéroid dans le terminal
+	cout << "Voici les points de l'Asteroid : " << endl;
+	for (int pt = 0; pt < a_nbPoints; pt++) {
+		a_points[pt].affiche();
+		cout << endl;
+	}
+}
+
+
+// Accesseurs
+
+vector<int> Asteroid::getEnvelopList() {
+	return a_enveloppe;
+}
+
+std::vector<Point> Asteroid::getPoints()
+{
+	return a_points;
+}
+
 int Asteroid::getRayon()
 {
 	return a_rayon;
 }
 
+void Asteroid::setPosition(int x, int y)
+{
+	a_position[0] = x;
+	a_position[1] = y;
+}
+
+void Asteroid::setDirection(double dirX, double dirY)
+{
+	a_direction[0] = dirX;
+	a_direction[1] = dirY;
+}
+
+double Asteroid::getPosX() {
+	return a_position[0];
+}
+double Asteroid::getPosY() {
+	return a_position[1];
+}
+
+double Asteroid::getDirX()
+{
+	return a_direction[0];
+}
+
+double Asteroid::getDirY()
+{
+	return a_direction[1];
+}
 

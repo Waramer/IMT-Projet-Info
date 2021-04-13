@@ -200,13 +200,13 @@ void Ecran::affiche() {
             //Gestion du score
             switch (difficultyLevel) {
             case 0:
-                score = j.j_joueur.getScoreEasy();
+                score = j.getJoueur().getScoreEasy();
                 break;
             case 1:
-                score = j.j_joueur.getScoreMedium();
+                score = j.getJoueur().getScoreMedium();
                 break;
             case 2:
-                score = j.j_joueur.getScoreHard();
+                score = j.getJoueur().getScoreHard();
                 break;
             default:
                 break;
@@ -624,16 +624,16 @@ void Ecran::affiche() {
 
             switch (difficultyLevel) {
             case 0:
-                DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreEasy()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                DrawText(TextFormat("SCORE : %d", j.getJoueur().getScoreEasy()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
                 DrawText(TextFormat("HIGHSCORE : %d", scoresTabEasy[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
                 break;
 
             case 1:
-                DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreMedium()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                DrawText(TextFormat("SCORE : %d", j.getJoueur().getScoreMedium()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
                 DrawText(TextFormat("HIGHSCORE : %d", scoresTabMedium[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
                 break;
             case 2:
-                DrawText(TextFormat("SCORE : %d", j.j_joueur.getScoreHard()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
+                DrawText(TextFormat("SCORE : %d", j.getJoueur().getScoreHard()), x / 2 - tailleS5 / 2, 350, 75, GRAY);
                 DrawText(TextFormat("HIGHSCORE : %d", scoresTabHard[0]), x / 2 - tailleS6 / 2, 450, 75, GRAY);
                 break;
             default:
