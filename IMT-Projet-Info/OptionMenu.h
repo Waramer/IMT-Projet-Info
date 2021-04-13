@@ -1,5 +1,6 @@
 #include <raylib.h>
 
+//Classe codée par Louis Delacour
 class OptionMenu
 {
 private:

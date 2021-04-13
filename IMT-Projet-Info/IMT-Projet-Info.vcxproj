@@ -126,7 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Louis\Downloads\raylib-3.5.0\raylib-3.5.0\projects\VS2019\bin\x64\Release.DLL</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\raylib-3.5.0\projects\VS2019\bin\x64\Release.DLL</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

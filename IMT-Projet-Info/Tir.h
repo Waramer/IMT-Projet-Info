@@ -3,7 +3,7 @@
 #define TIR_H_INCLUDED
 
 #include "Point.h"
-
+//Classe codée par Clément Kieffer et Quentin Delezenne
 class Tir
 {
 public:

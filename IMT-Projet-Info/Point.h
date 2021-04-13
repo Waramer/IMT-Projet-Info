@@ -4,6 +4,7 @@
 
 #include <string>
 
+//Classe codée par Quentin Delezenne
 class Point
 {
 private:
